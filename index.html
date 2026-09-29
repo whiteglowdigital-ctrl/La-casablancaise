@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- ─── SEO & partage : à adapter pour chaque client (voir README.md) ─── -->
+  <title>La Casablancaise — Restaurant, Thiès</title>
+  <meta name="description" content="Restaurant à Thiès : spécialités marocaines, cuisine sénégalaise, grillades, pizzas et crêpes, dans un cadre élégant. Commande en ligne, retrait sur place ou livraison.">
+  <meta name="theme-color" content="#f4f3f0">
+  <meta property="og:type" content="restaurant">
+  <meta property="og:locale" content="fr_SN">
+  <meta property="og:site_name" content="La Casablancaise">
+  <meta property="og:title" content="La Casablancaise — Restaurant, Thiès">
+  <meta property="og:description" content="Restaurant à Thiès : spécialités marocaines, cuisine sénégalaise, grillades, pizzas et crêpes, dans un cadre élégant. Commande en ligne, retrait sur place ou livraison.">
+  <!-- og:image doit être une URL absolue : remplacer par https://<domaine>/images/og.jpg une fois le site en ligne -->
+  <meta property="og:image" content="images/og.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Une table dressée à La Casablancaise, Thiès">
+  <meta name="twitter:card" content="summary_large_image">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Restaurant",
+    "name": "La Casablancaise",
+    "image": "images/og.jpg",
+    "address": { "@type": "PostalAddress", "streetAddress": "183 Rue de Verdun", "addressLocality": "Thiès", "addressCountry": "SN" },
+    "telephone": "+221764052386",
+    "email": "contact@lacasablancaise.fr",
+    "servesCuisine": ["Marocaine", "Sénégalaise", "Grillades", "Pizzas", "Crêpes"],
+    "openingHoursSpecification": [{
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      "opens": "10:00", "closes": "23:59"
+    }],
+    "sameAs": ["https://www.instagram.com/lacasablancaise_thies"]
+  }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="apple-touch-icon" href="images/favicon.png">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="commande.css">
+</head>
+<body>
+
+  <!-- ══════════ PRELOADER ══════════ -->
+  <div class="loader" id="loader" aria-hidden="true">
+    <div class="loader-inner">
+      <p class="loader-wordmark"></p>
+      <span class="loader-rule"><i id="loaderBar"></i></span>
+    </div>
+  </div>
+
+  <!-- ══════════ CONTENU ══════════ -->
+  <main class="smooth" id="smooth">
+
+    <!-- ═══ Tous les textes sont injectés par render.js depuis content.js ═══ -->
+
+    <!-- ─── SCÈNE 1 · HERO — nuage d'images → zoom sur l'image d'accroche ─── -->
+    <section class="scene s-hero" id="hero" data-pin="5">
+      <div class="pin">
+
+        <div class="floaters" aria-hidden="true">
+          <figure class="fl" style="--x:-4%;  --y:13%; --w:196px" data-d="0.55"><img src="images/f01.jpg" alt=""></figure>
+          <figure class="fl" style="--x:21%;   --y:3%; --w:142px" data-d="0.90"><img src="images/f02.jpg" alt=""></figure>
+          <figure class="fl" style="--x:40%;  --y:-8%; --w:232px" data-d="0.40"><img src="images/f03.jpg" alt=""></figure>
+          <figure class="fl" style="--x:63%;  --y:7%; --w:126px" data-d="0.75"><img src="images/f04.jpg" alt=""></figure>
+          <figure class="fl" style="--x:85%;  --y:1%; --w:208px" data-d="1.00"><img src="images/f05.jpg" alt=""></figure>
+          <figure class="fl" style="--x:-2%;  --y:45%; --w:116px" data-d="0.50"><img src="images/f06.jpg" alt=""></figure>
+          <figure class="fl" style="--x:94%;  --y:37%; --w:172px" data-d="0.70"><img src="images/f07.jpg" alt=""></figure>
+          <figure class="fl" style="--x:13%;  --y:71%; --w:248px" data-d="0.35"><img src="images/f08.jpg" alt=""></figure>
+          <figure class="fl" style="--x:44%;  --y:81%; --w:134px" data-d="0.85"><img src="images/f09.jpg" alt=""></figure>
+          <figure class="fl" style="--x:73%;  --y:64%; --w:188px" data-d="0.60"><img src="images/f10.jpg" alt=""></figure>
+        </div>
+
+        <div class="hero-copy">
+          <p class="hero-kicker mono" id="heroKicker"></p>
+          <h1 class="hero-title">
+            <span class="hero-line1" id="heroLine1"></span>
+            <span class="hero-line2" id="heroLine2">
+              <span class="hl"></span>
+              <span class="grow" id="grow1"><img src="images/hero.jpg" alt=""></span>
+              <span class="hl"></span>
+            </span>
+          </h1>
+        </div>
+
+        <!-- calque plein écran : titre blanc sur l'image -->
+        <div class="spot" id="spot" aria-hidden="true">
+          <h2 class="spot-intro" id="spotIntro"></h2>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ─── SCÈNE 2 · MANIFESTE (remplissage caractère par caractère) ─── -->
+    <section class="scene s-fill" id="manifeste" data-pin="3.5">
+      <div class="pin">
+        <p class="fill-text" id="fillText"></p>
+      </div>
+    </section>
+
+    <!-- ─── SCÈNE 3 · CARTE — plats phares en masonry parallaxe ─── -->
+    <section class="collection" id="carte">
+      <header class="coll-head">
+        <p class="mono ash"></p>
+        <h2 class="coll-title" id="collTitle"></h2>
+        <p class="coll-sub"></p>
+        <p class="mono ash"></p>
+      </header>
+
+      <div id="collGrid"></div>
+    </section>
+
+    <!-- ─── SCÈNE 4 · DEVISE — mots-clés géants sur bande d'accent ─── -->
+    <div class="band" id="valeurs">
+      <div class="diag to-accent" aria-hidden="true"></div>
+      <section class="scene s-motto" data-pin="4">
+        <div class="pin motto-pin">
+          <p class="motto-kicker mono" id="mottoKicker"></p>
+          <div class="motto-track" id="mottoTrack"></div>
+          <p class="motto-hint mono" id="mottoHint"></p>
+        </div>
+      </section>
+      <div class="diag from-accent" aria-hidden="true"></div>
+    </div>
+
+    <!-- ─── SCÈNE 5 · PROCESSUS — « Une soirée, 3 temps » ─── -->
+    <section class="scene s-night" id="soiree" data-pin="9">
+      <div class="pin">
+
+        <div class="night-line" id="nightLine">
+          <span class="hl nw" id="nw1"></span>
+          <span class="hl nw" id="nw2"></span>
+          <span class="grow" id="grow2"><img src="images/process.jpg" alt=""></span>
+          <span class="hl nw" id="nw3"></span>
+        </div>
+
+        <!-- compteur monumental : le numéro d'étape défile comme un odomètre -->
+        <div class="bignum" id="bigNum" aria-hidden="true"><span class="bignum-fixed">0</span><span class="bignum-roll"><span id="bigRoll"></span></span></div>
+
+        <!-- contenu de l'étape, à gauche -->
+        <div class="psteps" id="psteps"></div>
+
+        <p class="steps-cta" id="stepsCta">
+          <a href="#commande" data-nav id="stepsCtaLink"> <svg class="cta-oval" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><path id="ctaOval" d="M50,6 C88,4 98,22 97,50 C96,82 76,96 49,95 C16,94 3,76 4,48 C5,18 20,7 50,6 Z"/></svg></a>
+        </p>
+
+        <!-- rideau de lames : essuie le plein écran SANS jamais dézoomer -->
+        <div class="wipe" id="nightWipe" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+
+      </div>
+    </section>
+
+    <!-- ─── SCÈNE 6 · AVIS CLIENT — citation, guillemets géants ─── -->
+    <section class="scene s-quote" id="temoignage" data-pin="3">
+      <div class="pin">
+        <div class="q-stack">
+          <span class="q-glyph" aria-hidden="true">“</span>
+          <blockquote class="q-block">
+            <p class="q-text" id="quoteText"></p>
+          </blockquote>
+          <div class="q-sign">
+            <span class="q-rule" aria-hidden="true"></span>
+            <div class="q-sign-row" id="quoteAuthorWrap">
+              <p class="q-name" id="quoteAuthor"></p>
+              <p class="q-ctx mono ash" id="figKicker"></p>
+              <p class="q-fig" id="bigFigure"><span class="fig-pre" id="figPre"></span><span class="fig-val" id="figVal">0</span><span class="fig-unit" id="figUnit"></span></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SCÈNE 7 · PHRASES FINALES + TRAÎNÉE D'IMAGES SOUS LA SOURIS ─── -->
+    <section class="scene s-final" id="final" data-pin="2.6">
+      <div class="pin">
+        <p class="final-text">
+          <span class="fs" id="fs1"></span>
+          <span class="fs" id="fs2"></span>
+          <span class="fs" id="fs3"></span><br>
+          <span class="fs" id="fs4"></span>
+        </p>
+
+        <!-- réserve d'images pour la traînée sous la souris -->
+        <div class="trail" id="trail" aria-hidden="true">
+          <img src="images/t01.jpg" style="--tw:150px" alt="" decoding="async">
+          <img src="images/t02.jpg" style="--tw:190px" alt="" decoding="async">
+          <img src="images/t03.jpg" style="--tw:120px" alt="" decoding="async">
+          <img src="images/t04.jpg" style="--tw:200px" alt="" decoding="async">
+          <img src="images/t05.jpg" style="--tw:96px" alt="" decoding="async">
+          <img src="images/t06.jpg" style="--tw:170px" alt="" decoding="async">
+          <img src="images/t07.jpg" style="--tw:34px" alt="" decoding="async">
+          <img src="images/t08.jpg" style="--tw:140px" alt="" decoding="async">
+          <img src="images/t09.jpg" style="--tw:200px" alt="" decoding="async">
+          <img src="images/t10.jpg" style="--tw:110px" alt="" decoding="async">
+          <img src="images/t11.jpg" style="--tw:28px" alt="" decoding="async">
+          <img src="images/t12.jpg" style="--tw:160px" alt="" decoding="async">
+          <img src="images/t13.jpg" style="--tw:130px" alt="" decoding="async">
+          <img src="images/t14.jpg" style="--tw:180px" alt="" decoding="async">
+          <img src="images/t15.jpg" style="--tw:40px" alt="" decoding="async">
+          <img src="images/t16.jpg" style="--tw:150px" alt="" decoding="async">
+          <img src="images/t17.jpg" style="--tw:120px" alt="" decoding="async">
+          <img src="images/t18.jpg" style="--tw:200px" alt="" decoding="async">
+          <img src="images/t19.jpg" style="--tw:100px" alt="" decoding="async">
+          <img src="images/t20.jpg" style="--tw:170px" alt="" decoding="async">
+        </div>
+      </div>
+    </section>
+
+    <!-- ─── SCÈNE 8 · COMMANDE EN LIGNE (construite par commande.js) ─── -->
+    <section class="order" id="commande" aria-label="Commander en ligne"></section>
+
+    <!-- ─── FOOTER ─── -->
+    <footer class="footer" id="contact">
+      <img class="footer-logo reveal" src="images/logo.png" alt="" width="633" height="341">
+      <p class="footer-kicker mono ash reveal"></p>
+      <a class="footer-mail reveal" href="#"><span class="footer-mail-text"></span></a>
+      <p class="footer-reassurance mono ash reveal"></p>
+      <h2 class="footer-name" id="footerName"></h2>
+      <div class="footer-bottom">
+        <p class="mono ash"></p>
+        <p class="mono"></p>
+        <p class="mono ash"></p>
+      </div>
+    </footer>
+
+  </main>
+
+  <!-- ══════════ CHROME FIXE — barre flottante en haut ══════════ -->
+
+  <header class="dock" id="dock">
+    <a class="dock-wordmark" href="#hero" data-nav></a>
+    <nav class="dock-nav" aria-label="Navigation principale">
+      <a class="dock-link mono" href="#carte" data-nav></a>
+      <a class="dock-link mono" href="#soiree" data-nav data-landing="0.8"></a>
+    </nav>
+    <a class="dock-cta mono" href="#commande" data-nav></a>
+  </header>
+
+  <!-- données client, puis moteur (l'ordre compte) -->
+  <script src="content.js"></script>
+  <script src="render.js"></script>
+  <script src="commande.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
