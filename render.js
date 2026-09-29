@@ -181,6 +181,7 @@
         </div>
         <p class="resa-err" id="resaErr" hidden>Indiquez votre nom, la date et l’heure.</p>
         <button class="btn btn-green" type="submit">${SOCIAL.whatsapp} ${esc(R.button)}</button>
+        <p class="resa-done" id="resaDone" hidden>WhatsApp ne s’est pas ouvert ? <a id="resaLink" href="#" target="_blank" rel="noopener">Ouvrir la réservation dans WhatsApp</a></p>
       </form>
       <div class="resa-contact">
         <h3 class="h3">${esc(R.contactTitle)}</h3>
@@ -204,7 +205,10 @@
     if (!ok) return;
     const date = new Date(v('date') + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
     const msg = `${R.greeting} :\n\n*Nom :* ${v('name')}\n*Date :* ${date}\n*Heure :* ${v('time').replace(':', ' h ')}\n*Personnes :* ${v('guests')}`;
-    window.open(`https://wa.me/${O.whatsapp}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+    const url = `https://wa.me/${O.whatsapp}?text=${encodeURIComponent(msg)}`;
+    $('#resaLink').href = url;
+    $('#resaDone').hidden = false;
+    window.open(url, '_blank', 'noopener');
   });
 
   /* ─── Pied de page ─── */

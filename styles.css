@@ -34,6 +34,7 @@
   --ink-faint: var(--line);
   --mono: var(--sans);
   --ease-out: cubic-bezier(.2, .8, .2, 1);
+  color-scheme: light;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -103,7 +104,7 @@ section[id] { scroll-margin-top: var(--header-h); }
 .topbar .social:hover { background: rgba(255,255,255,.12); }
 
 /* ─── En-tête ─── */
-.header { position: sticky; top: 0; z-index: 100; background: var(--paper); border-bottom: 1px solid var(--line); transition: box-shadow .3s; }
+.header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 100; background: var(--paper); border-bottom: 1px solid var(--line); transition: box-shadow .3s; }
 .header.is-stuck { box-shadow: 0 6px 24px rgba(0,0,0,.07); }
 .header-in { display: flex; align-items: center; gap: 28px; height: var(--header-h); }
 .logo img { height: 56px; width: auto; }
@@ -213,6 +214,8 @@ section[id] { scroll-margin-top: var(--header-h); }
   border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; min-height: 48px; outline: none;
 }
 .rf input:focus, .rf select:focus { border-color: var(--gold); }
+.resa-done { margin-top: 16px; font-size: 14px; color: var(--ash); }
+.resa-done a { color: var(--gold-text); font-weight: 500; text-decoration: underline; }
 .resa-err { color: #b23a2b; font-size: 14px; margin: -8px 0 14px; }
 .resa-form .btn svg { width: 19px; height: 19px; }
 .resa-contact { background: var(--green); color: #fff; padding: clamp(28px, 4vw, 52px); display: flex; flex-direction: column; gap: 24px; }
