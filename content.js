@@ -171,11 +171,12 @@ window.SITE_CONTENT = {
     kicker: 'COMMANDER EN LIGNE',
     title: 'À emporter ou livré chez vous',
     sub: 'Choisissez vos plats, validez : votre commande nous arrive directement sur WhatsApp.',
+    /* icon : bag, scooter, wallet, clock ; short = version courte affichée sur mobile */
     infos: [
-      { k: 'RETRAIT', v: 'Sur place, 183 rue de Verdun' },
-      { k: 'LIVRAISON', v: 'Dans Thiès, de 500 à 1 500 F selon le quartier' },
-      { k: 'PAIEMENT', v: 'À la réception : Wave, Orange Money ou espèces' },
-      { k: 'HORAIRES', v: '10 h – minuit, fermé le dimanche' }
+      { icon: 'bag', k: 'RETRAIT', v: 'Sur place, 183 rue de Verdun', short: '183 rue de Verdun' },
+      { icon: 'scooter', k: 'LIVRAISON', v: 'Dans Thiès, de 500 à 1 500 F selon le quartier', short: '500 à 1 500 F' },
+      { icon: 'wallet', k: 'PAIEMENT', v: 'À la réception : Wave, Orange Money ou espèces', short: 'Wave, OM, espèces' },
+      { icon: 'clock', k: 'HORAIRES', v: '10 h – minuit, fermé le dimanche', short: '10 h – minuit' }
     ],
     /* heures pleines ; closedDays : 0 = dimanche ; utcOffset : Sénégal = 0 */
     hours: { open: 10, close: 24, closedDays: [0], utcOffset: 0 },

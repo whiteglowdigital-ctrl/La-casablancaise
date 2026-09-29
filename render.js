@@ -65,7 +65,7 @@
       <nav class="nav" aria-label="Menu principal">
         ${C.nav.filter((n) => !n.page).map((n) => `<a href="${esc(navHref(n))}">${esc(n.label)}</a>`).join('')}
       </nav>
-      <a class="btn btn-dark header-cta${PAGE === 'commande' ? ' is-current' : ''}" href="${ORDER_URL}">${icon('bag')} <span>${esc(C.navCta)}</span></a>
+      <a class="btn btn-light header-cta${PAGE === 'commande' ? ' is-current' : ''}" href="${ORDER_URL}">${icon('bag')} <span>${esc(C.navCta)}</span></a>
     </div>`);
 
   /* ─── Accueil ─── */
@@ -77,7 +77,7 @@
       <p class="lead">${esc(H.text)}</p>
       <div class="btns">
         <a class="btn btn-dark" href="#carte">${esc(H.ctaMenu)} ${icon('cutlery')}</a>
-        <a class="btn btn-line" href="#reservation">${esc(H.ctaBook)} ${icon('calendar')}</a>
+        <a class="btn btn-light" href="#reservation">${esc(H.ctaBook)} ${icon('calendar')}</a>
       </div>
     </div>
     <div class="hero-media">
@@ -137,24 +137,24 @@
   /* ─── Bandeau commander ─── */
   const PR = C.promo;
   if (PR) fill('promo', `<div class="wrap"><div class="promo-in">
-    <img class="promo-img" src="${esc(PR.image)}" alt="" loading="lazy">
+    <div class="promo-media"><img class="promo-img" src="${esc(PR.image)}" alt="" loading="lazy"></div>
     <div class="promo-title"><h2>${esc(PR.title)}</h2><p>${esc(PR.text)}</p></div>
     <ul class="promo-items">
       ${PR.items.map((i) => `<li>${icon(i.icon, 'ic ic-lg')}<b>${esc(i.title)}</b><span>${esc(i.text)}</span></li>`).join('')}
     </ul>
-    <a class="btn btn-light" href="${ORDER_URL}">${esc(PR.cta)} ${icon('arrow')}</a>
+    <div class="promo-cta"><a class="btn btn-light" href="${ORDER_URL}">${esc(PR.cta)} ${icon('arrow')}</a></div>
   </div></div>`);
 
   /* ─── Spécialité + avis ─── */
   const SP = C.special, spItem = SP && byId[SP.id], T = C.testimonial;
   if (SP) fill('special', `<div class="wrap special-in">
     ${spItem ? `<div class="chef">
-      <img class="chef-img" src="${esc(SP.image)}" alt="${esc(spItem.name)}" loading="lazy">
+      <div class="chef-media"><img class="chef-img" src="${esc(SP.image)}" alt="${esc(spItem.name)}" loading="lazy"><span class="chef-badge">${fcfa(spItem.price)}</span></div>
       <div class="chef-text">
         ${heading(SP.script, spItem.name)}
         <p>${esc(SP.text)}</p>
         <div class="chef-foot"><span class="price">${fcfa(spItem.price)}</span>
-          <a class="btn btn-dark" href="${addHref(spItem.id)}">${esc(SP.cta)} ${icon('arrow')}</a></div>
+          <a class="btn btn-light" href="${addHref(spItem.id)}">${esc(SP.cta)} ${icon('arrow')}</a></div>
       </div>
     </div>` : ''}
     <figure class="review">

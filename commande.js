@@ -19,6 +19,13 @@
   const byId = Object.fromEntries(O.items.map((i) => [i.id, i]));
   const cats = [...new Set(O.items.map((i) => i.cat))];
   const cart = {};                                       // id → quantité
+  // pictogrammes du bandeau d'infos (traits, 24 × 24)
+  const ICON = {
+    bag: '<path d="M5 8h14l-1 12H6Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/>',
+    scooter: '<circle cx="6" cy="17" r="2.5"/><circle cx="18" cy="17" r="2.5"/><path d="M8.5 17h7M15 6h2l3 11M4 12h7l2 5"/><path d="M4 8h6v4H4z"/>',
+    wallet: '<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M16 14.5h2"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'
+  };
   const remeasure = () => dispatchEvent(new Event('resize')); // app.js recalcule la hauteur de page
 
   /* ─── 1 · Section : infos, filtres, cartes plats ─── */
@@ -28,9 +35,9 @@
       <h2 class="order-title">${esc(O.title)}</h2>
       <p class="order-sub">${esc(O.sub)}</p>
     </header>
-    <div class="order-infos">
-      ${O.infos.map((i) => `<div class="order-info"><span class="mono">${esc(i.k)}</span><span>${esc(i.v)}</span></div>`).join('')}
-    </div>
+    <ul class="order-infos" aria-label="Informations pratiques">
+      ${O.infos.map((i) => `<li class="order-info">${ICON[i.icon] ? `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[i.icon]}</svg>` : ''}<span class="oi-text"><b>${esc(i.k)}</b><span class="oi-long">${esc(i.v)}</span><span class="oi-short">${esc(i.short || i.v)}</span></span></li>`).join('')}
+    </ul>
     <div class="order-filters" role="group" aria-label="Catégories de la carte">
       ${cats.map((c, k) => `<button type="button" class="chip${k ? '' : ' is-on'}" data-cat="${esc(c)}" aria-pressed="${k ? 'false' : 'true'}">${esc(c)}</button>`).join('')}
     </div>
