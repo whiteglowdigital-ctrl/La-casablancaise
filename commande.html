@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- ─── SEO & partage : à adapter pour chaque client (voir README.md) ─── -->
+  <title>Commander en ligne — La Casablancaise, Thiès</title>
+  <meta name="description" content="Commandez en ligne chez La Casablancaise, restaurant à Thiès : spécialités marocaines, cuisine sénégalaise, grillades, pizzas et crêpes, dans un cadre élégant. Commande en ligne, retrait sur place ou livraison.">
+  <meta name="theme-color" content="#17120F">
+  <meta property="og:type" content="restaurant">
+  <meta property="og:locale" content="fr_SN">
+  <meta property="og:site_name" content="La Casablancaise">
+  <meta property="og:title" content="La Casablancaise — Restaurant, Thiès">
+  <meta property="og:description" content="Restaurant à Thiès : spécialités marocaines, cuisine sénégalaise, grillades, pizzas et crêpes, dans un cadre élégant. Commande en ligne, retrait sur place ou livraison.">
+  <meta property="og:image" content="https://whiteglowdigital-ctrl.github.io/La-casablancaise/images/og.jpg">
+  <meta property="og:url" content="https://whiteglowdigital-ctrl.github.io/La-casablancaise/commande.html">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Une table dressée à La Casablancaise, Thiès">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Jost:wght@400;500;600&family=Allura&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="apple-touch-icon" href="images/favicon.png">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="commande.css">
+</head>
+<body data-page="commande">
+  <a class="skip" href="#commande">Aller à la carte</a>
+
+  <header class="header" id="header"></header>
+
+  <main>
+    <section class="page-hero" id="pageHero"></section>
+    <!-- construite par commande.js -->
+    <section class="order section" id="commande" aria-label="Commander en ligne"></section>
+  </main>
+
+  <footer class="footer" id="footer"></footer>
+
+  <!-- ordre de chargement : données → rendu → module de commande -->
+  <script src="content.js"></script>
+  <script src="render.js"></script>
+  <script src="commande.js"></script>
+</body>
+</html>

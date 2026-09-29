@@ -336,6 +336,20 @@
     $('#coFoot').hidden = false;
   }
 
+  /* ─── 9 · Arrivée depuis l'accueil : commande.html#add-<id> ajoute le plat ─── */
+  const fromHome = decodeURIComponent(location.hash).match(/^#add-(.+)$/);
+  if (fromHome && byId[fromHome[1]]) {
+    const id = fromHome[1];
+    cart[id] = 1;
+    const chip = $(`.chip[data-cat="${CSS.escape(byId[id].cat)}"]`, root);
+    if (chip) chip.click();
+    try { history.replaceState(null, '', location.pathname + location.search); } catch (e) { /* aperçu */ }
+    requestAnimationFrame(() => {
+      const d = $(`.dish[data-id="${CSS.escape(id)}"]`, root);
+      if (d) { d.classList.add('is-picked'); d.scrollIntoView({ block: 'center' }); }
+    });
+  }
+
   renderCart();
   updatePayNote();
 })();

@@ -6,7 +6,7 @@
   <!-- ─── SEO & partage : à adapter pour chaque client (voir README.md) ─── -->
   <title>La Casablancaise — Restaurant, Thiès</title>
   <meta name="description" content="Restaurant à Thiès : spécialités marocaines, cuisine sénégalaise, grillades, pizzas et crêpes, dans un cadre élégant. Commande en ligne, retrait sur place ou livraison.">
-  <meta name="theme-color" content="#1d3b2f">
+  <meta name="theme-color" content="#17120F">
   <meta property="og:type" content="restaurant">
   <meta property="og:locale" content="fr_SN">
   <meta property="og:site_name" content="La Casablancaise">
@@ -38,17 +38,16 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600&family=Jost:wght@400;500;600&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Jost:wght@400;500;600&family=Allura&display=swap" rel="stylesheet">
   <link rel="icon" type="image/png" href="images/favicon.png">
   <link rel="apple-touch-icon" href="images/favicon.png">
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="commande.css">
 </head>
-<body>
+<body data-page="accueil">
   <a class="skip" href="#carte">Aller à la carte</a>
 
   <!-- Le contenu de chaque bloc est injecté par render.js à partir de content.js -->
-  <div class="topbar" id="topbar"></div>
   <header class="header" id="header"></header>
 
   <main>
@@ -56,18 +55,16 @@
     <div class="features" id="features"></div>
     <section class="about section" id="histoire"></section>
     <section class="signature section" id="carte"></section>
+    <section class="promo" id="promo"></section>
     <section class="special section" id="special"></section>
-    <!-- construite par commande.js -->
-    <section class="order section" id="commande" aria-label="Commander en ligne"></section>
     <section class="gallery section" id="galerie"></section>
-    <section class="reservation section" id="reservation"></section>
+    <section class="reservation" id="reservation"></section>
   </main>
 
   <footer class="footer" id="footer"></footer>
 
-  <!-- ordre de chargement : données → rendu → module de commande -->
+  <!-- ordre de chargement : données → rendu -->
   <script src="content.js"></script>
   <script src="render.js"></script>
-  <script src="commande.js"></script>
 </body>
 </html>

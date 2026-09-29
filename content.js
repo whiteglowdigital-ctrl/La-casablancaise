@@ -26,61 +26,56 @@ window.SITE_CONTENT = {
     credit: 'Site créé par Jëfya'
   },
 
-  /* menu du haut (les ancres correspondent aux sections de index.html) */
+  /* menu du haut — id = ancre d'une section de l'accueil, page = autre page */
   nav: [
-    { label: 'Accueil', href: '#accueil' },
-    { label: 'Notre histoire', href: '#histoire' },
-    { label: 'La carte', href: '#carte' },
-    { label: 'Commander', href: '#commande' },
-    { label: 'Galerie', href: '#galerie' },
-    { label: 'Réserver', href: '#reservation' }
+    { label: 'Accueil', id: 'accueil' },
+    { label: 'Notre histoire', id: 'histoire' },
+    { label: 'La carte', id: 'carte' },
+    { label: 'Galerie', id: 'galerie' },
+    { label: 'Réservation', id: 'reservation' },
+    { label: 'Commander', page: 'commande.html' }
   ],
-  navCta: 'Commander',
+  navCta: 'Commander en ligne',
 
   /* 1 · ACCUEIL */
   hero: {
-    kicker: 'Cuisine marocaine · Saveurs du Sénégal',
+    script: 'Bienvenue à Thiès',
     titleA: 'Du Maroc au Sénégal,',
-    titleB: 'une table à',
-    titleEm: 'Thiès.',
+    titleB: 'une même table.',
     text: 'Tajines, grillades, pizzas et crêpes, servis dans un cadre élégant. Sur place, à emporter ou livré chez vous.',
     ctaMenu: 'Voir la carte',
     ctaBook: 'Réserver une table',
     image: 'images/hero.jpg',
-    imageAlt: 'Tajine, couscous et mezzés sur une table de La Casablancaise'
+    imageAlt: 'Tajine, couscous et mezzés sur une table de La Casablancaise',
+    sealRing: 'CUISINE MAISON • DU MAROC AU SÉNÉGAL • ',
+    sealText: 'plats à la carte'      /* le nombre est calculé depuis order.items */
   },
 
-  /* bandeau d'atouts sous l'accueil — icônes : leaf, chef, star, scooter, heart, clock */
+  /* bandeau d'atouts — icônes : leaf, chef, star, scooter, heart, bag, wallet, clock */
   features: [
-    { icon: 'leaf', title: 'Produits frais', text: 'Cuisinés chaque jour' },
-    { icon: 'chef', title: 'Fait maison', text: 'Jusqu’au pain des snacks' },
-    { icon: 'star', title: 'Cadre élégant', text: 'Seul, en famille ou entre amis' },
-    { icon: 'scooter', title: 'Livraison à Thiès', text: 'De 500 à 1 500 F selon le quartier' }
+    { icon: 'leaf', title: 'Produits frais', text: 'Des produits choisis et cuisinés chaque jour.' },
+    { icon: 'chef', title: 'Fait maison', text: 'Les tajines mijotent, le pain des snacks est maison.' },
+    { icon: 'star', title: 'Cadre élégant', text: 'Seul, en famille ou entre amis.' },
+    { icon: 'heart', title: 'Service attentif', text: 'De l’entrée jusqu’au dessert.' }
   ],
 
   /* 2 · NOTRE HISTOIRE */
   about: {
     script: 'Notre histoire',
-    title: 'Deux cuisines, une même table',
+    titleA: 'Plus qu’un repas,',
+    titleB: 'un voyage.',
     text: 'Tajines de Casablanca, yassa et thiof grillé, pizzas et crêpes : notre carte fait se rencontrer deux cuisines. Les tajines mijotent, le thiof passe sur le grill, le pain des snacks est fait maison. Dans un cadre élégant, chacun trouve son plat et sa place à table.',
+    signature: 'Au plaisir de vous recevoir',
     image: 'images/process.jpg',
     imageAlt: 'La salle de La Casablancaise le soir',
     image2: 'images/f04.jpg',
-    image2Alt: 'Le chef dresse une assiette',
-    badgeText: 'plats à la carte',     /* le nombre est calculé depuis order.items */
-    values: [
-      { icon: 'heart', title: 'Générosité', text: 'Des assiettes qui donnent envie de revenir.' },
-      { icon: 'star', title: 'Élégance', text: 'Un cadre soigné, jusqu’au dernier détail.' },
-      { icon: 'people', title: 'Partage', text: 'Une table faite pour se retrouver.' }
-    ],
-    cta: 'Commander en ligne'
+    image2Alt: 'Le chef dresse une assiette'
   },
 
-  /* 3 · LA CARTE — plats phares ; id = identifiant du plat dans order.items (prix et ajout au panier) */
+  /* 3 · LA CARTE — plats phares ; id = identifiant du plat dans order.items (prix, photo, ajout au panier) */
   signature: {
-    kicker: 'Nos incontournables',
-    title: 'Les plats de la maison',
-    sub: 'Spécialités marocaines, plats du pays et grillades : un aperçu de la carte.',
+    script: 'À la carte',
+    title: 'Nos incontournables',
     cta: 'Voir toute la carte',
     items: [
       { id: 'tajine-pruneaux', label: 'Spécialité marocaine' },
@@ -94,24 +89,38 @@ window.SITE_CONTENT = {
     ]
   },
 
+  /* bandeau « commander » */
+  promo: {
+    title: 'Envie de commander\u00a0?',
+    text: 'Choisissez vos plats en ligne, la commande nous arrive sur WhatsApp.',
+    image: 'images/f03.jpg',
+    items: [
+      { icon: 'bag', title: 'Retrait sur place', text: '183 rue de Verdun' },
+      { icon: 'scooter', title: 'Livraison', text: 'De 500 à 1 500 F' },
+      { icon: 'wallet', title: 'Paiement', text: 'Wave, Orange Money, espèces' }
+    ],
+    cta: 'Commander en ligne'
+  },
+
   /* spécialité du chef + avis client */
   special: {
     script: 'La spécialité du chef',
     id: 'tanjia',
     text: 'Mijotée longuement à la marocaine, la tanjia arrive fondante et parfumée. Le plat à partager qui fait la réputation de la maison.',
     image: 'images/p4.jpg',
-    cta: 'Ajouter à ma commande'
+    cta: 'Commander'
   },
   testimonial: {
+    script: 'Ils en parlent',
     title: 'Ce que disent nos clients',
     quote: 'Franchement, coup de cœur. La nourriture est trop bonne, portions généreuses, goûts bien maîtrisés. Le staff est adorable et l’endroit donne envie de chiller.',
     author: 'Client',
     source: 'Avis Google'
   },
 
-  /* 5 · GALERIE ET HORAIRES */
+  /* 5 · GALERIE */
   gallery: {
-    kicker: 'Galerie',
+    script: 'Galerie',
     title: 'Un lieu pour se retrouver',
     images: [
       { src: 'images/f07.jpg', alt: 'Une table dressée à la marocaine' },
@@ -125,21 +134,26 @@ window.SITE_CONTENT = {
   hours: {
     title: 'Horaires',
     rows: [
-      ['Lundi – Vendredi', '10 h – minuit'],
-      ['Samedi', '10 h – minuit'],
+      ['Lundi – Samedi', '10 h – minuit'],
       ['Dimanche', 'Fermé']
-    ],
-    script: 'Au plaisir de vous recevoir'
+    ]
   },
 
   /* 6 · RÉSERVATION — le formulaire ouvre WhatsApp (numéro : order.whatsapp) */
   reservation: {
-    kicker: 'Réservation',
+    script: 'Bienvenue',
     title: 'Réservez votre table',
-    text: 'Un dîner, un anniversaire, un repas d’affaires ? Indiquez-nous la date et le nombre de personnes, nous vous confirmons sur WhatsApp.',
+    text: 'Nous vous confirmons la réservation sur WhatsApp.',
     greeting: 'Bonjour La Casablancaise, je souhaite réserver une table',
-    button: 'Réserver sur WhatsApp',
-    contactTitle: 'Nous trouver'
+    button: 'Réserver'
+  },
+
+  /* page « Commander » */
+  orderPage: {
+    script: 'Commande en ligne',
+    title: 'À emporter ou livré chez vous',
+    text: 'Choisissez vos plats, validez : votre commande nous arrive directement sur WhatsApp.',
+    image: 'images/hero.jpg'
   },
 
   /* 11 · COMMANDE EN LIGNE — lue par commande.js (envoi sur WhatsApp)
