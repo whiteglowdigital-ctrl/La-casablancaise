@@ -2,8 +2,8 @@
    DONNÉES DU RESTAURANT — content.js
    Tout ce qui est propre au restaurant est ici : textes, carte,
    prix, images, horaires, livraison, contact, WhatsApp.
-   Le moteur (render.js, app.js, commande.js) ne contient aucune
-   donnée client. Voir README.md pour créer un nouveau site.
+   render.js et commande.js ne contiennent aucune donnée client.
+   Voir README.md pour créer un nouveau site.
    Client : La Casablancaise — Thiès (Sénégal)
    ═══════════════════════════════════════════════════════════ */
 
@@ -11,108 +11,135 @@ window.SITE_CONTENT = {
 
   brand: {
     name: 'La Casablancaise',
+    tagline: 'Restaurant · Thiès',
     logo: 'images/logo.png',
     logoAlt: 'Logo La Casablancaise',
-    title: 'La Casablancaise — Restaurant, Thiès',
-    description: 'Restaurant à Thiès : spécialités marocaines, cuisine sénégalaise, grillades, pizzas et crêpes, dans un cadre élégant.',
-    kicker: 'LA CASABLANCAISE — RESTAURANT, THIÈS',
-    copyright: '© 2026 — 183 RUE DE VERDUN, THIÈS',
-    credit: 'SITE CRÉÉ PAR JËFYA',
-    socials: [
-      { label: 'INSTAGRAM ↗', url: 'https://www.instagram.com/lacasablancaise_thies' },
-      { label: 'WHATSAPP ↗', url: 'https://wa.me/221764052386' }
-    ]
+    address: '183 rue de Verdun, Thiès',
+    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=La+Casablancaise+183+rue+de+Verdun+Thi%C3%A8s',
+    phone: '76 405 23 86',
+    phoneHref: 'tel:+221764052386',
+    email: 'contact@lacasablancaise.fr',
+    hoursShort: 'Lun – Sam : 10 h – minuit',
+    instagram: 'https://www.instagram.com/lacasablancaise_thies',
+    whatsappUrl: 'https://wa.me/221764052386',
+    copyright: '© 2026 La Casablancaise — 183 rue de Verdun, Thiès',
+    credit: 'Site créé par Jëfya'
   },
 
-  nav: { proof: 'CARTE', universes: 'SOIRÉE', cta: 'COMMANDER' },
+  /* menu du haut (les ancres correspondent aux sections de index.html) */
+  nav: [
+    { label: 'Accueil', href: '#accueil' },
+    { label: 'Notre histoire', href: '#histoire' },
+    { label: 'La carte', href: '#carte' },
+    { label: 'Commander', href: '#commande' },
+    { label: 'Galerie', href: '#galerie' },
+    { label: 'Réserver', href: '#reservation' }
+  ],
+  navCta: 'Commander',
 
-  /* 1 · ACCROCHE */
-  hook: {
-    line1: 'Du Maroc au Sénégal,',
-    line2a: 'une table à',
-    line2b: 'Thiès.',
+  /* 1 · ACCUEIL */
+  hero: {
+    kicker: 'Cuisine marocaine · Saveurs du Sénégal',
+    titleA: 'Du Maroc au Sénégal,',
+    titleB: 'une table à',
+    titleEm: 'Thiès.',
+    text: 'Tajines, grillades, pizzas et crêpes, servis dans un cadre élégant. Sur place, à emporter ou livré chez vous.',
+    ctaMenu: 'Voir la carte',
+    ctaBook: 'Réserver une table',
     image: 'images/hero.jpg',
-    imageAlt: 'Une table dressée à La Casablancaise',
-    floaters: [
-      'images/f01.jpg', 'images/f02.jpg', 'images/f03.jpg', 'images/f04.jpg', 'images/f05.jpg',
-      'images/f06.jpg', 'images/f07.jpg', 'images/f08.jpg', 'images/f09.jpg', 'images/f10.jpg'
-    ]
+    imageAlt: 'Tajine, couscous et mezzés sur une table de La Casablancaise'
   },
 
-  /* 2 · POSITIONNEMENT — 38 caractères */
-  positioning: 'Tajines, grillades et pizzas, à Thiès.',
+  /* bandeau d'atouts sous l'accueil — icônes : leaf, chef, star, scooter, heart, clock */
+  features: [
+    { icon: 'leaf', title: 'Produits frais', text: 'Cuisinés chaque jour' },
+    { icon: 'chef', title: 'Fait maison', text: 'Jusqu’au pain des snacks' },
+    { icon: 'star', title: 'Cadre élégant', text: 'Seul, en famille ou entre amis' },
+    { icon: 'scooter', title: 'Livraison à Thiès', text: 'De 500 à 1 500 F selon le quartier' }
+  ],
 
-  /* 3 · DÉMARCHE */
-  manifesto: {
-    text: 'Tajines de Casablanca, yassa et thiof grillé, pizzas et crêpes : notre carte fait se rencontrer deux cuisines. Dans un cadre élégant, chacun trouve [[son plat]] et sa place à table.'
-  },
-
-  /* 4 · PREUVE — masonry, 8 plats de la carte */
-  proof: {
-    layout: 'masonry',
-    kicker: 'À LA CARTE',
-    title: 'Nos incontournables',
-    sub: 'Spécialités marocaines, plats du pays et grillades : un aperçu de la carte.',
-    meta: 'HUIT PLATS — PRIX EN FCFA',
-    projects: [
-      { img: 'images/p1.jpg', title: 'Tajine aux pruneaux', meta: 'SPÉCIALITÉ MAROCAINE — 6 000' },
-      { img: 'images/p2.jpg', title: 'Thiof grillé', meta: 'PLAT — 7 000' },
-      { img: 'images/p3.jpg', title: 'Gambas rôties', meta: 'PLAT — 8 000' },
-      { img: 'images/p4.jpg', title: 'Tanjia', meta: 'SPÉCIALITÉ MAROCAINE — 7 000' },
-      { img: 'images/p5.jpg', title: 'Yassa poulet', meta: 'PLAT — 4 000' },
-      { img: 'images/p6.jpg', title: 'Filet de bœuf', meta: 'PLAT — 7 000' },
-      { img: 'images/p7.jpg', title: 'Pizza Norvégienne', meta: 'PIZZA — 5 500' },
-      { img: 'images/p8.jpg', title: 'Fondant au chocolat', meta: 'DESSERT — 3 500' }
-    ]
-  },
-
-  /* 5 · DEVISE */
-  motto: {
-    kicker: 'CE QUI GUIDE CHAQUE SERVICE',
-    words: [
-      { word: 'Générosité', hint: 'Des assiettes qui donnent envie de revenir.' },
-      { word: 'Élégance', hint: 'Un cadre soigné, jusqu’au dernier détail.' },
-      { word: 'Partage', hint: 'Une table faite pour se retrouver.' }
-    ]
-  },
-
-  /* 6-7 · PROCESSUS */
-  universes: {
-    introA: 'Une',
-    introB: 'soirée,',
-    introC: '3 temps.',
-    cta: 'Commander →',
+  /* 2 · NOTRE HISTOIRE */
+  about: {
+    script: 'Notre histoire',
+    title: 'Deux cuisines, une même table',
+    text: 'Tajines de Casablanca, yassa et thiof grillé, pizzas et crêpes : notre carte fait se rencontrer deux cuisines. Les tajines mijotent, le thiof passe sur le grill, le pain des snacks est fait maison. Dans un cadre élégant, chacun trouve son plat et sa place à table.',
     image: 'images/process.jpg',
     imageAlt: 'La salle de La Casablancaise le soir',
+    image2: 'images/f04.jpg',
+    image2Alt: 'Le chef dresse une assiette',
+    badgeText: 'plats à la carte',     /* le nombre est calculé depuis order.items */
+    values: [
+      { icon: 'heart', title: 'Générosité', text: 'Des assiettes qui donnent envie de revenir.' },
+      { icon: 'star', title: 'Élégance', text: 'Un cadre soigné, jusqu’au dernier détail.' },
+      { icon: 'people', title: 'Partage', text: 'Une table faite pour se retrouver.' }
+    ],
+    cta: 'Commander en ligne'
+  },
+
+  /* 3 · LA CARTE — plats phares ; id = identifiant du plat dans order.items (prix et ajout au panier) */
+  signature: {
+    kicker: 'Nos incontournables',
+    title: 'Les plats de la maison',
+    sub: 'Spécialités marocaines, plats du pays et grillades : un aperçu de la carte.',
+    cta: 'Voir toute la carte',
     items: [
-      { name: 'Choisir', meta: 'TEMPS — 01', desc: 'Entrées, tajines, grillades, pizzas ou crêpes : la carte se lit comme un voyage.' },
-      { name: 'Cuisiner', meta: 'TEMPS — 02', desc: 'Les tajines mijotent, le thiof passe sur le grill, le pain des snacks est fait maison.' },
-      { name: 'Servir', meta: 'TEMPS — 03', desc: 'Un service attentif, de l’entrée jusqu’au dessert, seul, en famille ou entre amis.' }
+      { id: 'tajine-pruneaux', label: 'Spécialité marocaine' },
+      { id: 'tanjia', label: 'Spécialité marocaine' },
+      { id: 'thiof', label: 'Plat' },
+      { id: 'yassa', label: 'Plat' },
+      { id: 'gambas', label: 'Plat' },
+      { id: 'filet-boeuf', label: 'Plat' },
+      { id: 'pz-norvegienne', label: 'Pizza' },
+      { id: 'ds-fondant', label: 'Dessert' }
     ]
   },
 
-  /* 8 · PREUVE SOCIALE — vrai avis Google (sans chiffre : la citation prend toute la place) */
+  /* spécialité du chef + avis client */
+  special: {
+    script: 'La spécialité du chef',
+    id: 'tanjia',
+    text: 'Mijotée longuement à la marocaine, la tanjia arrive fondante et parfumée. Le plat à partager qui fait la réputation de la maison.',
+    image: 'images/p4.jpg',
+    cta: 'Ajouter à ma commande'
+  },
   testimonial: {
-    kicker: 'AVIS GOOGLE — THIÈS',
-    figure: '',
-    unit: '',
+    title: 'Ce que disent nos clients',
     quote: 'Franchement, coup de cœur. La nourriture est trop bonne, portions généreuses, goûts bien maîtrisés. Le staff est adorable et l’endroit donne envie de chiller.',
-    author: 'CLIENT — AVIS GOOGLE'
+    author: 'Client',
+    source: 'Avis Google'
   },
 
-  /* 9 · OBJECTIONS */
-  objections: {
-    items: ['Pas de choix impossible.', 'Pas de service pressé.', 'Pas de cadre banal.'],
-    finale: 'Juste une',
-    pill: 'belle table.'
+  /* 5 · GALERIE ET HORAIRES */
+  gallery: {
+    kicker: 'Galerie',
+    title: 'Un lieu pour se retrouver',
+    images: [
+      { src: 'images/f07.jpg', alt: 'Une table dressée à la marocaine' },
+      { src: 'images/f02.jpg', alt: 'Tajines' },
+      { src: 'images/f03.jpg', alt: 'Brochettes sur le grill' },
+      { src: 'images/f10.jpg', alt: 'Un repas partagé entre amis' },
+      { src: 'images/f06.jpg', alt: 'Le dressage en cuisine' },
+      { src: 'images/f09.jpg', alt: 'Une pizza servie à table' }
+    ]
+  },
+  hours: {
+    title: 'Horaires',
+    rows: [
+      ['Lundi – Vendredi', '10 h – minuit'],
+      ['Samedi', '10 h – minuit'],
+      ['Dimanche', 'Fermé']
+    ],
+    script: 'Au plaisir de vous recevoir'
   },
 
-  /* 10 · CONVERSION */
-  contact: {
-    kicker: 'UNE TABLE, UN ÉVÉNEMENT ?',
-    phone: '76 405 23 86',
-    email: 'contact@lacasablancaise.fr',
-    reassurance: '10 H – MINUIT, FERMÉ LE DIMANCHE — RÉSERVATIONS : 76 405 23 86'
+  /* 6 · RÉSERVATION — le formulaire ouvre WhatsApp (numéro : order.whatsapp) */
+  reservation: {
+    kicker: 'Réservation',
+    title: 'Réservez votre table',
+    text: 'Un dîner, un anniversaire, un repas d’affaires ? Indiquez-nous la date et le nombre de personnes, nous vous confirmons sur WhatsApp.',
+    greeting: 'Bonjour La Casablancaise, je souhaite réserver une table',
+    button: 'Réserver sur WhatsApp',
+    contactTitle: 'Nous trouver'
   },
 
   /* 11 · COMMANDE EN LIGNE — lue par commande.js (envoi sur WhatsApp)
@@ -202,12 +229,4 @@ window.SITE_CONTENT = {
       { id: 'ds-2-boules', name: 'Deux boules de glace', cat: 'Desserts', price: 2000, img: 'images/menu/ds-2-boules.jpg' }
     ]
   },
-
-  /* traînée sous la souris — 20 visuels */
-  trail: [
-    'images/t01.jpg', 'images/t02.jpg', 'images/t03.jpg', 'images/t04.jpg', 'images/t05.jpg',
-    'images/t06.jpg', 'images/t07.jpg', 'images/t08.jpg', 'images/t09.jpg', 'images/t10.jpg',
-    'images/t11.jpg', 'images/t12.jpg', 'images/t13.jpg', 'images/t14.jpg', 'images/t15.jpg',
-    'images/t16.jpg', 'images/t17.jpg', 'images/t18.jpg', 'images/t19.jpg', 'images/t20.jpg'
-  ]
 };
