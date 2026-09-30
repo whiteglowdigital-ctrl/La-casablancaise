@@ -135,6 +135,12 @@ img{display:block;max-width:100%}
   filter:drop-shadow(0 12px 18px rgba(0,0,0,.35));transform:rotate(-8deg);pointer-events:none;
 }
 .slide .art small{position:absolute;font-size:52px;left:-34px;bottom:14px;transform:rotate(12deg)}
+.slide .art-photo{
+  position:absolute;right:-34px;bottom:-26px;width:200px;height:200px;border-radius:50%;overflow:hidden;
+  border:6px solid rgba(255,255,255,.25);box-shadow:0 14px 30px rgba(0,0,0,.35);background:inherit;
+}
+.slide .art-photo img{width:100%;height:100%;object-fit:cover}
+.slide > *:not(.art):not(.art-photo){position:relative;z-index:1}
 .dots{display:flex;justify-content:center;gap:6px;margin-top:10px}
 .dots button{width:7px;height:7px;border-radius:5px;background:#E3CFC0;transition:.25s}
 .dots button.on{width:22px;background:var(--red)}
@@ -579,15 +585,16 @@ const DATA = {
     { id: 'tacos',  label: 'Tacos & Chawarmas', icon: '🌯' },
     { id: 'drink',  label: 'Boissons',          icon: '🥤' }
   ],
-  /* img : chemin d'une vraie photo (ex. 'images/menu-classic.jpg') ; sinon l'emoji sert d'illustration */
+  /* img : photo du plat — lien Unsplash (licence libre, usage commercial gratuit) ou fichier local
+     (ex. 'images/menu-classic.jpg'). Si l'image manque ou ne charge pas, l'emoji sert d'illustration. */
   items: [
-    { id: 'classic',  cat: 'bucket', name: 'Menu Classic',        desc: '2 pcs poulet + frites + canette',        price: 2500,  emo: '🍗', side: '🍟', badge: 'Bestseller', rate: '4.8', img: '' },
-    { id: 'family1',  cat: 'bucket', name: 'Menu Family 1',       desc: '8 pcs poulet + frites + boisson GM',     price: 9500,  emo: '🍗', side: '🥤', badge: 'Famille',    rate: '4.8', img: '' },
+    { id: 'classic',  cat: 'bucket', name: 'Menu Classic',        desc: '2 pcs poulet + frites + canette',        price: 2500,  emo: '🍗', side: '🍟', badge: 'Bestseller', rate: '4.8', img: 'https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?auto=format&fit=crop&w=600&q=70' },
+    { id: 'family1',  cat: 'bucket', name: 'Menu Family 1',       desc: '8 pcs poulet + frites + boisson GM',     price: 9500,  emo: '🍗', side: '🥤', badge: 'Famille',    rate: '4.8', img: 'https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=600&q=70' },
     { id: 'family2',  cat: 'bucket', name: 'Menu Family 2',       desc: '15 pcs poulet + frites + boisson GM',    price: 16500, emo: '🍗', side: '🍗', badge: 'XXL',        rate: '4.9', img: '' },
     { id: 'popcorn',  cat: 'bucket', name: 'Poulet Pop-Corn',     desc: 'Grand modèle, facile à emporter',        price: 2500,  emo: '🍿', side: '🍗', badge: '',           rate: '4.6', img: '' },
-    { id: 'burgerxl', cat: 'burger', name: 'Djolof Burger XL',    desc: 'Le burger signature, format XL',         price: 3200,  emo: '🍔', side: '',   badge: 'Populaire',  rate: '4.7', img: '', tint: 'red' },
-    { id: 'cheese',   cat: 'burger', name: 'Cheese Burger Simple',desc: 'Steak, cheddar fondant, sauce maison',   price: 1500,  emo: '🍔', side: '🧀', badge: '',           rate: '4.5', img: '', tint: 'red' },
-    { id: 'tacos',    cat: 'tacos',  name: 'Tacos Djolof',        desc: 'Tacos généreux, sauce fromagère',        price: 3000,  emo: '🌮', side: '',   badge: 'Nouveau',    rate: '4.7', img: '', tint: 'red' },
+    { id: 'burgerxl', cat: 'burger', name: 'Djolof Burger XL',    desc: 'Le burger signature, format XL',         price: 3200,  emo: '🍔', side: '',   badge: 'Populaire',  rate: '4.7', img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=70', tint: 'red' },
+    { id: 'cheese',   cat: 'burger', name: 'Cheese Burger Simple',desc: 'Steak, cheddar fondant, sauce maison',   price: 1500,  emo: '🍔', side: '🧀', badge: '',           rate: '4.5', img: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=70', tint: 'red' },
+    { id: 'tacos',    cat: 'tacos',  name: 'Tacos Djolof',        desc: 'Tacos généreux, sauce fromagère',        price: 3000,  emo: '🌮', side: '',   badge: 'Nouveau',    rate: '4.7', img: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=70', tint: 'red' },
     { id: 'chawarma', cat: 'tacos',  name: 'Chawarma Royal',      desc: 'Chawarma garni + œuf',                   price: 1800,  emo: '🌯', side: '🥚', badge: '',           rate: '4.6', img: '', tint: 'red' },
     /* ⚠ Boissons : prix indicatifs à confirmer avec le restaurant */
     { id: 'canette',  cat: 'drink',  name: 'Canette 33 cl',       desc: 'Coca, Fanta ou Sprite',                  price: 500,   emo: '🥤', side: '',   badge: '',           rate: '',    img: '', tint: 'cool' },
@@ -656,8 +663,8 @@ const DATA = {
 
   /* ─── Vue Accueil ─── */
   const slides = [
-    { cls: '', tag: '🔥 Hot & Crispy', h: 'Le vrai goût <span>Djolof</span> à Thiès', p: 'Poulet pané minute, croustillant dehors, juteux dedans.', cta: 'Commander', go: 'bucket', art: '🍗', small: '🍟' },
-    { cls: 'gold', tag: '👨‍👩‍👧‍👦 En famille', h: 'Menu Family 2 : <span>15 pièces</span>', p: 'Frites + boisson grand modèle, pour toute la tribu.', cta: 'Je le veux', add: 'family2', art: '🍗', small: '🥤' },
+    { cls: '', tag: '🔥 Hot & Crispy', h: 'Le vrai goût <span>Djolof</span> à Thiès', p: 'Poulet pané minute, croustillant dehors, juteux dedans.', cta: 'Commander', go: 'bucket', art: '🍗', small: '🍟', photo: 'https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?auto=format&fit=crop&w=600&q=70' },
+    { cls: 'gold', tag: '👨‍👩‍👧‍👦 En famille', h: 'Menu Family 2 : <span>15 pièces</span>', p: 'Frites + boisson grand modèle, pour toute la tribu.', cta: 'Je le veux', add: 'family2', art: '🍗', small: '🥤', photo: 'https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=600&q=70' },
     { cls: 'dark', tag: '🛵 Livraison', h: 'Livré chez vous <span>dès 700 F</span>', p: 'Cité Senghor, Dixième, Nguinth, Thialy…', cta: 'Voir le menu', go: 'all', art: '🛵', small: '🍔' }
   ];
   $('#vHome').innerHTML = `
@@ -667,6 +674,7 @@ const DATA = {
           <span class="tag">${s.tag}</span><h3>${s.h}</h3><p>${s.p}</p>
           <button type="button" class="cta" ${s.add ? `data-inc="${s.add}"` : `data-slide-cat="${s.go}"`}>${s.cta} <i>→</i></button>
           <span class="art" aria-hidden="true">${s.art}<small>${s.small}</small></span>
+          ${s.photo ? `<span class="art-photo" aria-hidden="true"><img src="${esc(s.photo)}" alt="" onerror="this.parentNode.remove()"></span>` : ''}
         </div>`).join('')}
       </div>
       <div class="dots" id="dots">${slides.map((_, k) => `<button type="button" aria-label="Diapositive ${k + 1}"${k ? '' : ' class="on"'}></button>`).join('')}</div>
