@@ -45,6 +45,25 @@
   <link rel="stylesheet" href="commande.css">
 </head>
 <body data-page="accueil">
+  <!-- ─── Écran d'ouverture : logo quelques secondes, puis le site (une fois par visite) ─── -->
+  <script>
+    try { if (sessionStorage.getItem('intro-vue')) document.documentElement.classList.add('intro-off'); sessionStorage.setItem('intro-vue', '1'); } catch (e) {}
+  </script>
+  <div class="intro" id="intro" aria-hidden="true">
+    <div class="intro-in">
+      <div class="intro-logo" role="img" aria-label="La Casablancaise"></div>
+      <div class="intro-rule"><i></i><span>Restaurant · Thiès</span><i></i></div>
+    </div>
+  </div>
+  <script>
+    (function () {
+      var el = document.getElementById('intro');
+      function fin() { if (el && el.parentNode) el.parentNode.removeChild(el); }
+      el.addEventListener('click', function () { el.classList.add('is-skip'); setTimeout(fin, 450); });
+      el.addEventListener('animationend', function (e) { if (e.target === el) fin(); });
+      setTimeout(fin, 4200); // filet de sécurité
+    })();
+  </script>
   <a class="skip" href="#carte">Aller à la carte</a>
 
   <!-- Le contenu de chaque bloc est injecté par render.js à partir de content.js -->
