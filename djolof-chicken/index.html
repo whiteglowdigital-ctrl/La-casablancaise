@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Djolof Chicken Thiès — Commander</title>
+  <meta name="description" content="Commandez chez Djolof Chicken Thiès : buckets, burgers, tacos et chawarmas. Livraison dans Thiès ou retrait sur place, commande envoyée sur WhatsApp.">
+  <meta name="theme-color" content="#E51A1A">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════════════════════
+   DJOLOF CHICKEN THIÈS — prototype d'application mobile
+   Couleurs : modifier uniquement ce bloc :root
+   ═══════════════════════════════════════════════════════════ */
+:root{
+  --red:#E51A1A;          /* rouge Djolof */
+  --red-dark:#B80F0F;
+  --red-soft:#FDE8E6;
+  --gold:#F6B21B;         /* jaune safran */
+  --gold-soft:#FFF4D6;
+  --cream:#FFF5EC;        /* fond crème ultra-clair */
+  --white:#FFFFFF;
+  --ink:#1E1512;
+  --ink-2:#6E625C;
+  --line:#F1E6DA;
+  --green:#1FAF5A;
+  --shadow:0 6px 20px rgba(120,40,20,.08);
+  --shadow-lg:0 14px 40px rgba(120,40,20,.16);
+  --r:22px;
+  --nav-h:74px;
+  --safe-b:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+html.lock{overflow:hidden}
+body{
+  font-family:'Poppins',system-ui,-apple-system,sans-serif;
+  background:#F6E6D8;color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;border:0;background:none}
+img{display:block;max-width:100%}
+[hidden]{display:none!important}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* ─── Cadre « application » : plein écran sur mobile, centré sur ordinateur ─── */
+.app{
+  position:relative;max-width:480px;min-height:100vh;margin:0 auto;
+  background:var(--cream);
+  padding-bottom:calc(var(--nav-h) + var(--safe-b) + 24px);
+  overflow-x:hidden;
+}
+.status{display:none}
+@media (min-width:520px){
+  body{padding:24px 0}
+  .app{max-width:430px;min-height:calc(100vh - 48px);border-radius:44px;border:10px solid #fff;
+    box-shadow:0 0 0 1px #EAD6C6,0 30px 80px rgba(80,20,10,.2)}
+  .status{display:flex;justify-content:space-between;align-items:center;padding:14px 26px 0;font-weight:700;font-size:14px;background:var(--cream)}
+  .status i{display:flex;gap:6px;align-items:center}
+  body .nav,body .cartbar{width:386px}
+}
+
+/* ─── En-tête ─── */
+.top{
+  position:sticky;top:0;z-index:30;
+  background:linear-gradient(var(--cream) 82%,rgba(255,245,236,0));
+  padding:calc(14px + env(safe-area-inset-top,0px)) 16px 10px;
+}
+.top-row{display:flex;align-items:center;gap:12px}
+.icon-btn{
+  position:relative;flex:none;width:46px;height:46px;border-radius:15px;
+  display:grid;place-items:center;background:var(--white);box-shadow:var(--shadow);
+}
+.icon-btn svg{width:22px;height:22px}
+.icon-btn .dot{
+  position:absolute;top:-4px;right:-4px;min-width:20px;height:20px;padding:0 5px;border-radius:10px;
+  background:var(--red);color:#fff;font-size:11px;font-weight:700;display:grid;place-items:center;
+  border:2px solid var(--cream);
+}
+.icon-btn .dot.pop{animation:pop .35s ease}
+@keyframes pop{50%{transform:scale(1.35)}}
+.hello{flex:1;min-width:0}
+.hello small{display:block;font-size:12.5px;color:var(--ink-2)}
+.hello strong{display:block;font-size:19px;font-weight:800;line-height:1.15;letter-spacing:-.3px}
+.hello strong em{font-style:normal;color:var(--red)}
+
+.search{display:flex;gap:10px;margin-top:14px}
+.search .filter{width:50px;height:50px;border-radius:16px}
+.search label{
+  flex:1;min-width:0;display:flex;align-items:center;gap:10px;height:50px;padding:0 16px;
+  background:var(--white);border-radius:16px;box-shadow:var(--shadow);
+}
+.search svg{width:20px;height:20px;flex:none;color:var(--ink-2)}
+.search input{flex:1;min-width:0;border:0;outline:0;background:none;font-size:14px}
+.search input::placeholder{color:#A99B92}
+
+/* ─── Vues ─── */
+.view{padding:0 16px}
+.view-title{font-size:22px;font-weight:800;margin:8px 0 4px;letter-spacing:-.3px}
+.view-sub{font-size:13px;color:var(--ink-2);margin-bottom:16px}
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin:22px 0 12px}
+.sec-head h2{font-size:18px;font-weight:700}
+.link{font-size:13px;font-weight:600;color:var(--red);display:inline-flex;align-items:center;gap:4px}
+
+/* ─── Carrousel ─── */
+.hero{position:relative;margin-top:6px}
+.slides{
+  display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;
+  scrollbar-width:none;border-radius:var(--r);
+}
+.slides::-webkit-scrollbar{display:none}
+.slide{
+  position:relative;flex:0 0 100%;scroll-snap-align:start;min-height:190px;
+  border-radius:var(--r);overflow:hidden;color:#fff;padding:20px;
+  background:radial-gradient(130% 150% at 90% 20%,#D8341C 0%,#A3180E 45%,#5E0B06 100%);
+  display:flex;flex-direction:column;justify-content:center;
+}
+.slide.gold{background:radial-gradient(120% 140% at 85% 30%,#FFD15C 0%,var(--gold) 45%,#D9860B 100%);color:var(--ink)}
+.slide.dark{background:radial-gradient(120% 140% at 85% 30%,#5A1A12 0%,#2A0D09 70%)}
+.slide .tag{
+  align-self:flex-start;font-size:10.5px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
+  background:rgba(255,255,255,.2);padding:5px 10px;border-radius:20px;margin-bottom:10px;
+}
+.slide.gold .tag{background:rgba(255,255,255,.55)}
+.slide{min-height:210px}
+.slide h3{font-size:25px;font-weight:800;line-height:1.08;max-width:62%;letter-spacing:-.4px}
+.slide h3 span{color:var(--gold)}
+.slide.gold h3 span{color:var(--red)}
+.slide p{font-size:12px;opacity:.9;margin:8px 0 14px;max-width:58%}
+.slide .cta{
+  align-self:flex-start;display:inline-flex;align-items:center;gap:8px;
+  background:var(--red);color:#fff;font-weight:700;font-size:13px;
+  padding:9px 10px 9px 18px;border-radius:30px;box-shadow:0 8px 18px rgba(0,0,0,.25);
+}
+.slide .cta i{width:22px;height:22px;border-radius:50%;background:#fff;color:var(--red);display:grid;place-items:center;font-style:normal;font-size:12px}
+.slide .art{
+  position:absolute;right:-14px;bottom:-10px;font-size:118px;line-height:1;
+  filter:drop-shadow(0 12px 18px rgba(0,0,0,.35));transform:rotate(-8deg);pointer-events:none;
+}
+.slide .art small{position:absolute;font-size:52px;left:-34px;bottom:14px;transform:rotate(12deg)}
+.slide .art-photo{
+  position:absolute;right:-34px;bottom:-26px;width:200px;height:200px;border-radius:50%;overflow:hidden;
+  border:6px solid rgba(255,255,255,.25);box-shadow:0 14px 30px rgba(0,0,0,.35);background:inherit;
+}
+.slide .art-photo img{width:100%;height:100%;object-fit:cover}
+.slide > *:not(.art):not(.art-photo){position:relative;z-index:1}
+.dots{display:flex;justify-content:center;gap:6px;margin-top:10px}
+.dots button{width:7px;height:7px;border-radius:5px;background:#E3CFC0;transition:.25s}
+.dots button.on{width:22px;background:var(--red)}
+
+/* ─── Catégories (bulles) ─── */
+.cats{
+  display:flex;gap:14px;overflow-x:auto;padding:4px 16px 6px;margin:18px -16px 0;
+  scrollbar-width:none;
+}
+.cats::-webkit-scrollbar{display:none}
+.cat{flex:none;display:flex;flex-direction:column;align-items:center;gap:7px;width:68px}
+.cat .bub{
+  width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:30px;
+  background:var(--white);box-shadow:var(--shadow);transition:.2s;border:2px solid transparent;
+}
+.cat .bub{position:relative;overflow:hidden}
+.cat .bub img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.cat.on .bub img{opacity:.9}
+.cat span{font-size:11.5px;font-weight:500;text-align:center;line-height:1.2;color:var(--ink-2)}
+.cat.on .bub{background:var(--red-soft);border-color:var(--red);transform:translateY(-2px)}
+.cat.on span{color:var(--red);font-weight:700}
+
+/* ─── Cartes produits ─── */
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.rail{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding:0 16px;margin:0 -16px;padding:4px 16px 10px;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.rail .dish{flex:0 0 calc((100% - 20px) / 3);min-width:108px;scroll-snap-align:start;padding:0 0 10px;overflow:hidden}
+.rail .dish-img{aspect-ratio:1/0.9;border-radius:0}
+.rail .dish-emo{font-size:48px}
+.rail .dish-name,.rail .dish-desc,.rail .dish-rate,.rail .dish-foot{padding:0 9px}
+.rail .dish-name{font-size:12.5px;margin-top:8px}
+.rail .dish-desc{font-size:10.5px}
+.rail .price{font-size:14px}
+.rail .price small{display:none}
+.rail .add{width:30px;height:30px}
+.rail .add svg{width:15px;height:15px}
+.rail .badge{font-size:8.5px;padding:3px 7px}
+.rail .fav{width:26px;height:26px}
+.rail .empty{flex:1}
+.dish{
+  position:relative;background:var(--white);border-radius:var(--r);padding:10px 10px 12px;
+  box-shadow:var(--shadow);display:flex;flex-direction:column;
+}
+.dish-img{
+  position:relative;aspect-ratio:1/0.82;border-radius:18px;overflow:hidden;
+  display:grid;place-items:center;
+  background:radial-gradient(circle at 50% 60%,var(--gold-soft) 0%,#FFE7C2 55%,#FFD9A8 100%);
+}
+.dish-img.t-red{background:radial-gradient(circle at 50% 60%,#FFE9E4 0%,#FFD3C8 60%,#FFB8A6 100%)}
+.dish-img.t-cool{background:radial-gradient(circle at 50% 60%,#EAF6FF 0%,#D5ECFB 60%,#BFE0F7 100%)}
+.dish-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.dish-emo{font-size:62px;line-height:1;filter:drop-shadow(0 8px 10px rgba(120,40,20,.25))}
+.dish-emo small{font-size:30px;margin-left:-14px;vertical-align:bottom}
+.badge{
+  position:absolute;top:8px;left:8px;z-index:1;font-size:9.5px;font-weight:700;letter-spacing:.4px;
+  text-transform:uppercase;color:#fff;background:var(--red);padding:4px 8px;border-radius:12px;
+}
+.badge.gold{background:var(--gold);color:var(--ink)}
+.fav{
+  position:absolute;top:6px;right:6px;z-index:1;width:30px;height:30px;border-radius:50%;
+  background:rgba(255,255,255,.9);display:grid;place-items:center;
+}
+.fav svg{width:16px;height:16px;color:var(--ink-2)}
+.fav.on svg{color:var(--red);fill:var(--red)}
+.dish-name{font-size:14px;font-weight:700;line-height:1.25;margin-top:10px}
+.dish-desc{font-size:11.5px;color:var(--ink-2);line-height:1.35;margin-top:3px;flex:1}
+.dish-rate{font-size:11px;color:var(--ink-2);margin-top:5px}
+.dish-rate b{color:var(--gold);letter-spacing:1px}
+.dish-foot{display:flex;align-items:center;justify-content:space-between;margin-top:8px;gap:6px}
+.price{font-size:15.5px;font-weight:800;white-space:nowrap}
+.price small{font-size:10px;font-weight:600;color:var(--ink-2)}
+.add{
+  position:relative;flex:none;width:36px;height:36px;border-radius:50%;background:var(--red);color:#fff;
+  display:grid;place-items:center;box-shadow:0 6px 14px rgba(229,26,26,.35);transition:transform .15s;
+}
+.add:active{transform:scale(.88)}
+.add svg{width:18px;height:18px}
+.add .qty{
+  position:absolute;top:-6px;right:-6px;min-width:19px;height:19px;padding:0 4px;border-radius:10px;
+  background:var(--gold);color:var(--ink);font-size:10.5px;font-weight:800;display:grid;place-items:center;
+  border:2px solid var(--white);
+}
+.empty{grid-column:1/-1;text-align:center;padding:30px 10px;color:var(--ink-2);font-size:14px}
+.empty b{display:block;font-size:40px;margin-bottom:6px}
+
+/* ─── Bannière promo ─── */
+.promo{
+  position:relative;overflow:hidden;margin-top:20px;border-radius:var(--r);padding:18px;
+  background:linear-gradient(120deg,#FFEFD9,#FFE0DA);
+}
+.promo > *{position:relative;z-index:1}
+.promo .art,.promo .promo-photo,.promo .seal{position:absolute}
+.promo small{font-size:12px;font-weight:700;color:var(--red)}
+.promo h3{font-size:21px;font-weight:800;line-height:1.1;margin:4px 0;max-width:62%}
+.promo p{font-size:12px;color:var(--ink-2);max-width:60%}
+.promo .btn-sm{margin-top:12px}
+.promo .art{position:absolute;right:-6px;bottom:-12px;font-size:96px;transform:rotate(-10deg)}
+.promo-photo{position:absolute;right:-20px;bottom:-30px;width:170px;height:170px;border-radius:50%;overflow:hidden;box-shadow:0 10px 24px rgba(120,40,20,.25)}
+.promo-photo img{width:100%;height:100%;object-fit:cover}
+.promo .seal{
+  position:absolute;top:12px;right:14px;width:62px;height:62px;border-radius:50%;background:var(--red);color:#fff;
+  display:grid;place-items:center;text-align:center;font-size:10px;font-weight:700;line-height:1.1;
+  box-shadow:0 6px 16px rgba(229,26,26,.35);z-index:2;
+}
+.promo .seal b{display:block;font-size:17px}
+.btn-sm{
+  display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;font-weight:700;
+  font-size:13px;padding:9px 16px;border-radius:30px;
+}
+
+/* ─── Atouts ─── */
+.perks{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}
+.perk{background:var(--white);border-radius:16px;padding:12px 8px;text-align:center;box-shadow:var(--shadow)}
+.perk b{display:block;font-size:22px}
+.perk span{display:block;font-size:11px;font-weight:600;margin-top:4px}
+.perk small{display:block;font-size:10px;color:var(--ink-2)}
+
+/* ─── Liste « Menu » ─── */
+.menu-group h3{font-size:16px;font-weight:700;margin:20px 0 10px;display:flex;align-items:center;gap:8px}
+.row{
+  display:flex;flex-direction:row;gap:12px;align-items:center;background:var(--white);border-radius:18px;padding:10px;
+  box-shadow:var(--shadow);margin-bottom:10px;
+}
+.row .dish-img{width:84px;flex:none;aspect-ratio:1;border-radius:14px}
+.row .dish-emo{font-size:40px}
+.row .dish-emo small{font-size:20px;margin-left:-8px}
+.row-main{flex:1;min-width:0}
+.row-main .dish-name{margin-top:0}
+.row .dish-foot{margin-top:6px}
+
+/* ─── Offres / Commandes / Profil ─── */
+.card{background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--shadow);margin-bottom:12px}
+.offer{display:flex;gap:14px;align-items:center;color:#fff;background:linear-gradient(120deg,var(--red),#FF5A36)}
+.offer.gold{background:linear-gradient(120deg,var(--gold),#FFD15C);color:var(--ink)}
+.offer.dark{background:linear-gradient(120deg,#2A0D09,#5A1A12)}
+.offer .big{position:relative;flex:none;width:84px;height:84px;border-radius:50%;overflow:hidden;display:grid;place-items:center;font-size:44px;background:rgba(255,255,255,.2);border:3px solid rgba(255,255,255,.5)}
+.offer .big img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.offer h4{font-size:16px;font-weight:800}
+.offer p{font-size:12px;opacity:.9;margin:3px 0 10px}
+.offer .btn-sm{background:#fff;color:var(--red)}
+.hist-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.hist-ref{font-weight:800;font-size:15px}
+.hist-date{font-size:11.5px;color:var(--ink-2)}
+.pill{font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:12px;background:var(--gold-soft);color:#9A6A00;white-space:nowrap}
+.hist-lines{font-size:12.5px;color:var(--ink-2);margin:10px 0;line-height:1.55}
+.hist-foot{display:flex;justify-content:space-between;align-items:center;border-top:1px dashed var(--line);padding-top:10px}
+.hist-foot b{font-size:15px}
+.ghost{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;font-weight:600;font-size:13px;
+  padding:9px 16px;border-radius:30px;border:1.5px solid var(--red);color:var(--red);background:transparent;
+}
+.profile-head{display:flex;align-items:center;gap:14px}
+.avatar{width:62px;height:62px;border-radius:50%;background:var(--red-soft);display:grid;place-items:center;font-size:30px}
+.profile-head h3{font-size:18px;font-weight:800}
+.profile-head p{font-size:12.5px;color:var(--ink-2)}
+.info-list{list-style:none}
+.info-list li{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line);font-size:13.5px}
+.info-list li:last-child{border-bottom:0}
+.info-list li > b{font-size:20px;width:28px;text-align:center}
+.info-list small{display:block;color:var(--ink-2);font-size:11.5px}
+.info-list a{color:inherit;text-decoration:none}
+
+/* ─── Barre panier flottante ─── */
+.cartbar{
+  position:fixed;z-index:35;left:50%;transform:translate(-50%,140%);
+  bottom:calc(var(--nav-h) + var(--safe-b) + 22px);
+  width:min(448px,calc(100% - 32px));display:flex;align-items:center;gap:12px;
+  background:var(--ink);color:#fff;border-radius:18px;padding:10px 10px 10px 14px;
+  box-shadow:var(--shadow-lg);transition:transform .35s cubic-bezier(.2,.9,.3,1.2),opacity .25s,visibility .35s;
+  opacity:0;visibility:hidden;
+}
+.cartbar.on{transform:translate(-50%,0);opacity:1;visibility:visible}
+.cartbar .cb-ico{width:38px;height:38px;border-radius:12px;background:var(--red);display:grid;place-items:center;font-size:18px}
+.cartbar .cb-txt{flex:1;text-align:left;font-size:12px;line-height:1.3;opacity:.85}
+.cartbar .cb-txt b{display:block;font-size:15px;opacity:1}
+.cartbar .cb-go{background:var(--gold);color:var(--ink);font-weight:700;font-size:13px;padding:10px 14px;border-radius:12px}
+
+/* ─── Barre de navigation inférieure ─── */
+.nav{
+  position:fixed;z-index:40;left:50%;transform:translateX(-50%);bottom:0;
+  width:min(456px,calc(100% - 24px));height:var(--nav-h);padding:0 8px;bottom:calc(10px + var(--safe-b));
+  background:var(--white);border-radius:30px;box-shadow:0 10px 34px rgba(120,40,20,.16);
+  display:grid;grid-template-columns:repeat(5,1fr);align-items:center;
+}
+@media (min-width:520px){.nav{bottom:40px}.cartbar{bottom:calc(var(--nav-h) + 54px)}}
+.nav button{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;font-weight:500;color:#A99B92}
+.nav button svg{width:23px;height:23px}
+.nav button.on{color:var(--red);font-weight:700}
+.nav .center{position:relative;top:-18px}
+.nav .center .fab{
+  width:62px;height:62px;border-radius:50%;background:var(--red);color:#fff;display:grid;place-items:center;
+  box-shadow:0 10px 22px rgba(229,26,26,.4);border:5px solid var(--cream);
+}
+.nav .center.on .fab{background:var(--red-dark)}
+.nav .center span{margin-top:-2px;white-space:nowrap;font-size:10px}
+
+/* ─── Tiroir menu (bouton ☰) ─── */
+.drawer{position:fixed;inset:0;z-index:60;visibility:hidden}
+.drawer.open{visibility:visible}
+.veil{position:absolute;inset:0;background:rgba(30,21,18,.45);opacity:0;transition:opacity .3s}
+.drawer.open .veil,.sheet.open .veil{opacity:1}
+.drawer-panel{
+  position:absolute;top:0;bottom:0;left:0;width:min(300px,82%);background:var(--cream);
+  padding:calc(24px + env(safe-area-inset-top,0px)) 20px 24px;transform:translateX(-100%);transition:transform .3s;
+  display:flex;flex-direction:column;gap:6px;
+}
+.drawer.open .drawer-panel{transform:none}
+.brand-mark{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+.brand-mark .logo{width:48px;height:48px;border-radius:14px;background:var(--red);display:grid;place-items:center;font-size:26px}
+.brand-mark b{display:block;font-size:17px;font-weight:800;line-height:1.1}
+.brand-mark small{font-size:11.5px;color:var(--ink-2)}
+.drawer-panel a,.drawer-panel button.dl{
+  display:flex;align-items:center;gap:12px;padding:12px;border-radius:14px;font-size:14px;font-weight:600;
+  color:var(--ink);text-decoration:none;text-align:left;
+}
+.drawer-panel a:hover,.drawer-panel button.dl:hover{background:var(--white)}
+.drawer-foot{margin-top:auto;font-size:11.5px;color:var(--ink-2);line-height:1.5}
+
+/* ─── Panier : feuille coulissante ─── */
+.sheet{position:fixed;inset:0;z-index:70;visibility:hidden}
+.sheet.open{visibility:visible}
+.sheet-panel{
+  position:absolute;left:50%;bottom:0;width:min(480px,100%);max-height:94vh;max-height:94dvh;
+  background:var(--cream);border-radius:28px 28px 0 0;display:flex;flex-direction:column;
+  transform:translate(-50%,100%);transition:transform .38s cubic-bezier(.2,.9,.3,1);
+}
+.sheet.open .sheet-panel{transform:translate(-50%,0)}
+.grab{width:44px;height:5px;border-radius:3px;background:#E3CFC0;margin:10px auto 0}
+.sheet-top{display:flex;align-items:center;justify-content:space-between;padding:10px 18px 12px}
+.sheet-top h3{font-size:19px;font-weight:800}
+.x{width:38px;height:38px;border-radius:12px;background:var(--white);box-shadow:var(--shadow);font-size:16px}
+.sheet-scroll{flex:1;overflow-y:auto;padding:0 16px 16px;overscroll-behavior:contain}
+.block{background:var(--white);border-radius:20px;padding:14px;box-shadow:var(--shadow);margin-bottom:12px}
+.block-label{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--ink-2);margin-bottom:10px}
+.line{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.line:last-of-type{border-bottom:0}
+.line .thumb{width:48px;height:48px;border-radius:12px;flex:none;display:grid;place-items:center;font-size:26px;background:var(--gold-soft);overflow:hidden}
+.line .thumb img{width:100%;height:100%;object-fit:cover}
+.line-name{flex:1;min-width:0;font-size:13.5px;font-weight:600;line-height:1.25}
+.line-name small{display:block;font-weight:700;color:var(--red);font-size:12.5px;margin-top:2px}
+.stepper{display:flex;align-items:center;gap:2px;background:var(--cream);border-radius:20px;padding:3px}
+.stepper button{width:28px;height:28px;border-radius:50%;background:var(--white);font-weight:700;font-size:16px;box-shadow:0 2px 6px rgba(0,0,0,.06)}
+.stepper button[data-inc]{background:var(--red);color:#fff}
+.stepper b{min-width:24px;text-align:center;font-size:13.5px}
+.trash{width:30px;height:30px;border-radius:50%;color:#A99B92;display:grid;place-items:center}
+.trash svg{width:17px;height:17px}
+.sum{display:flex;justify-content:space-between;font-size:13.5px;color:var(--ink-2);margin-top:8px}
+.sum small{font-size:11.5px}
+.total{display:flex;justify-content:space-between;align-items:baseline;border-top:1.5px dashed var(--line);margin-top:10px;padding-top:10px;font-weight:700}
+.total b{font-size:20px;color:var(--red);font-weight:800}
+.field{display:block;margin-bottom:10px}
+.field > span{display:block;font-size:12.5px;font-weight:600;margin-bottom:5px}
+.field input,.field select,.field textarea{
+  width:100%;border:1.5px solid var(--line);background:var(--cream);border-radius:14px;padding:12px 14px;font-size:14px;outline:0;
+  appearance:none;-webkit-appearance:none;
+}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236E625C' stroke-width='2' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--red);background:#fff}
+.field textarea{resize:vertical;min-height:64px}
+.err{display:none;font-size:11.5px;color:var(--red);font-weight:600;margin-top:5px}
+.is-bad .err,.is-bad + .err{display:block}
+.field.is-bad input,.field.is-bad select{border-color:var(--red);background:#FFF5F4}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opt input{position:absolute;opacity:0;pointer-events:none}
+.opt span{
+  display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;padding:14px 8px;border-radius:16px;
+  border:2px solid var(--line);background:var(--cream);font-weight:700;font-size:13.5px;cursor:pointer;transition:.2s;height:100%;
+}
+.opt span b{font-size:26px}
+.opt span small{font-weight:500;font-size:11px;color:var(--ink-2)}
+.opt input:checked + span{border-color:var(--red);background:var(--red-soft);color:var(--red)}
+.opt input:focus-visible + span{outline:3px solid var(--gold);outline-offset:2px}
+.opts.is-bad .opt span{border-color:#F5A3A3}
+.sub-fields{margin-top:12px}
+.pickup{margin-top:12px;display:flex;gap:10px;align-items:flex-start;background:var(--gold-soft);border-radius:14px;padding:12px;font-size:12.5px;line-height:1.45}
+.pickup b{font-size:20px}
+.fee-hint{font-size:11.5px;color:var(--ink-2);margin-top:-4px;margin-bottom:6px}
+.sheet-foot{padding:12px 16px calc(14px + var(--safe-b));background:var(--white);border-radius:24px 24px 0 0;box-shadow:0 -8px 24px rgba(120,40,20,.08)}
+.send{
+  width:100%;display:flex;align-items:center;justify-content:center;gap:10px;min-height:56px;border-radius:18px;
+  background:var(--red);color:#fff;font-weight:800;font-size:14px;letter-spacing:.2px;text-transform:uppercase;text-decoration:none;
+  box-shadow:0 10px 22px rgba(229,26,26,.35);padding:0 14px;
+}
+.send svg{width:22px;height:22px;flex:none}
+.send-hint{font-size:11px;color:var(--ink-2);text-align:center;margin-top:8px}
+.done{text-align:center;padding:24px 8px}
+.done .big{font-size:64px}
+.done h4{font-size:20px;font-weight:800;margin:6px 0}
+.done p{font-size:13.5px;color:var(--ink-2);line-height:1.5}
+.done .ref{display:inline-block;font-weight:800;color:var(--red);background:var(--red-soft);padding:2px 8px;border-radius:8px}
+.done-actions{display:flex;flex-direction:column;gap:10px;margin-top:20px}
+
+/* ─── Toast ─── */
+.toast{
+  position:fixed;z-index:80;left:50%;top:calc(16px + env(safe-area-inset-top,0px));transform:translate(-50%,calc(-100% - 60px));
+  background:var(--ink);color:#fff;font-size:13px;font-weight:600;padding:10px 16px;border-radius:14px;
+  box-shadow:var(--shadow-lg);transition:transform .3s;max-width:calc(100% - 32px);text-align:center;
+}
+.toast.on{transform:translate(-50%,0)}
+
+@media (max-width:360px){
+  .grid{gap:9px}
+  .dish-emo{font-size:52px}
+  .price{font-size:14px}
+  .slide h3{font-size:21px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <div class="status" aria-hidden="true"><span>9:41</span><i><svg width="18" height="11" viewBox="0 0 18 11" fill="currentColor"><rect x="0" y="7" width="3" height="4" rx="1"/><rect x="5" y="5" width="3" height="6" rx="1"/><rect x="10" y="2.5" width="3" height="8.5" rx="1"/><rect x="15" y="0" width="3" height="11" rx="1"/></svg><svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M8 11 5.6 8.4a3.4 3.4 0 0 1 4.8 0Zm-4.2-4.4-1.6-1.7a8.3 8.3 0 0 1 11.6 0l-1.6 1.7a6 6 0 0 0-8.4 0ZM.5 3.1 0 2.6a11.5 11.5 0 0 1 16 0l-1.6 1.7A9.2 9.2 0 0 0 .5 3.1Z"/></svg><svg width="26" height="12" viewBox="0 0 26 12"><rect x=".5" y=".5" width="22" height="11" rx="3" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="19" height="8" rx="2" fill="currentColor"/><rect x="23.5" y="4" width="2" height="4" rx="1" fill="currentColor" opacity=".4"/></svg></i></div>
+
+  <!-- ─── En-tête ─── -->
+  <header class="top">
+    <div class="top-row">
+      <button class="icon-btn" type="button" id="menuBtn" aria-label="Ouvrir le menu" aria-controls="drawer">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+      </button>
+      <div class="hello">
+        <small>Hi, Chicken Lover! 🍗</small>
+        <strong>Croustillant. Juteux.<br><em>Toujours Djolof.</em></strong>
+      </div>
+      <button class="icon-btn" type="button" id="notifBtn" aria-label="Notifications : voir les offres">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10.3 20a1.9 1.9 0 0 0 3.4 0"/></svg>
+        <span class="dot">2</span>
+      </button>
+      <button class="icon-btn" type="button" id="bagBtn" aria-label="Ouvrir le panier" aria-controls="sheet">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14l-1 12H6Z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+        <span class="dot" id="bagCount" hidden>0</span>
+      </button>
+    </div>
+    <div class="search" role="search">
+      <label>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input type="search" id="q" placeholder="Rechercher votre poulet croustillant..." aria-label="Rechercher un plat" autocomplete="off">
+      </label>
+      <button class="icon-btn filter" type="button" data-go="menu" aria-label="Voir tout le menu par catégorie">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ─── Vues (construites par le script) ─── -->
+  <main>
+    <section class="view" data-view="home" id="vHome"></section>
+    <section class="view" data-view="menu" id="vMenu" hidden></section>
+    <section class="view" data-view="orders" id="vOrders" hidden></section>
+    <section class="view" data-view="offers" id="vOffers" hidden></section>
+    <section class="view" data-view="profile" id="vProfile" hidden></section>
+  </main>
+</div>
+
+<!-- ─── Barre panier flottante ─── -->
+<button class="cartbar" id="cartbar" type="button" aria-controls="sheet">
+  <span class="cb-ico">🛍️</span>
+  <span class="cb-txt" id="cartbarTxt" aria-live="polite"></span>
+  <span class="cb-go">Voir le panier →</span>
+</button>
+
+<!-- ─── Barre de navigation ─── -->
+<nav class="nav" aria-label="Navigation principale">
+  <button type="button" data-go="home" class="on" aria-current="page">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1Z"/></svg>Accueil
+  </button>
+  <button type="button" data-go="menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="2"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="2"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="2"/></svg>Menu
+  </button>
+  <button type="button" data-go="orders" class="center">
+    <span class="fab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="5" y="3" width="14" height="18" rx="2.5"/><path d="M9 8h6M9 12h6M9 16h4"/></svg></span>
+    <span>Mes Commandes</span>
+  </button>
+  <button type="button" data-go="offers">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8Z"/><circle cx="7.5" cy="8.5" r="1.5"/></svg>Offres
+  </button>
+  <button type="button" data-go="profile">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>Profil
+  </button>
+</nav>
+
+<!-- ─── Tiroir latéral ─── -->
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="veil" data-close-drawer></div>
+  <aside class="drawer-panel" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="brand-mark"><span class="logo">🍗</span><span><b>Djolof Chicken</b><small>Thiès · EDK Oil, Route de Dakar</small></span></div>
+    <button class="dl" type="button" data-go="home">🏠 Accueil</button>
+    <button class="dl" type="button" data-go="menu">📋 Toute la carte</button>
+    <button class="dl" type="button" data-go="orders">🧾 Mes commandes</button>
+    <button class="dl" type="button" data-go="offers">🏷️ Offres</button>
+    <a id="callLink" href="#">📞 Appeler le restaurant</a>
+    <a id="mapLink" href="#" target="_blank" rel="noopener">📍 Itinéraire</a>
+    <p class="drawer-foot">Prototype de démonstration — commande transmise sur WhatsApp, paiement à la réception.</p>
+  </aside>
+</div>
+
+<!-- ─── Panier + formulaire (feuille) ─── -->
+<div class="sheet" id="sheet" aria-hidden="true">
+  <div class="veil" data-close></div>
+  <section class="sheet-panel" role="dialog" aria-modal="true" aria-labelledby="coTitle">
+    <div class="grab" aria-hidden="true"></div>
+    <div class="sheet-top"><h3 id="coTitle">Mon panier 🛍️</h3><button class="x" type="button" data-close aria-label="Fermer">✕</button></div>
+    <div class="sheet-scroll" id="coScroll">
+      <form id="coForm" novalidate>
+        <div class="block">
+          <span class="block-label">🍗 Mes plats</span>
+          <div id="coLines"></div>
+          <div class="sum"><span>Sous-total</span><span id="coSub"></span></div>
+          <div class="sum"><span>Livraison <small id="coZoneName"></small></span><span id="coFee"></span></div>
+          <div class="total"><span>Total à payer</span><b id="coTotal"></b></div>
+        </div>
+
+        <div class="block">
+          <span class="block-label">👤 Mes coordonnées</span>
+          <label class="field"><span>Nom complet</span><input name="name" autocomplete="name" placeholder="Ex. Awa Ndiaye" required><p class="err">Indiquez votre nom.</p></label>
+          <label class="field"><span>Téléphone</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="77 123 45 67" required><p class="err">Numéro sénégalais à 9 chiffres, ex. 77 123 45 67.</p></label>
+        </div>
+
+        <div class="block">
+          <span class="block-label" id="lblMode">🛵 Livraison ou retrait ?</span>
+          <div class="opts" role="radiogroup" aria-labelledby="lblMode">
+            <label class="opt"><input type="radio" name="mode" value="livraison"><span><b>🛵</b>Livraison<small>À domicile dans Thiès</small></span></label>
+            <label class="opt"><input type="radio" name="mode" value="retrait"><span><b>🏪</b>Retrait<small>Sur place · gratuit</small></span></label>
+          </div>
+          <p class="err" id="modeErr">Choisissez livraison ou retrait.</p>
+          <div class="sub-fields" id="delivFields" hidden>
+            <label class="field"><span>Quartier</span><select name="zone" id="zoneSel"></select><p class="err">Choisissez votre quartier.</p></label>
+            <p class="fee-hint" id="feeHint"></p>
+            <label class="field"><span>Adresse / repère (facultatif)</span><input name="addr" placeholder="Ex. près de la pharmacie, maison bleue"></label>
+          </div>
+          <div class="pickup" id="pickupInfo" hidden></div>
+        </div>
+
+        <div class="block">
+          <span class="block-label">📝 Note pour la cuisine</span>
+          <label class="field"><span>Une précision ? (facultatif)</span><textarea name="note" rows="2" placeholder="Ex. bien épicé, sans oignons, sauce à part…"></textarea></label>
+        </div>
+      </form>
+    </div>
+    <div class="sheet-foot" id="coFoot">
+      <button class="send" type="submit" form="coForm">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2l-.4-.2Z"/></svg>
+        Valider ma commande via WhatsApp
+      </button>
+      <p class="send-hint">WhatsApp s'ouvre avec votre ticket — il reste à appuyer sur Envoyer.</p>
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   1 · DONNÉES DU RESTAURANT — seule partie à modifier
+   ═══════════════════════════════════════════════════════════ */
+/* Photos libres de droits Pexels (licence Pexels : usage commercial gratuit, sans attribution),
+   copiées dans images/ ; le nom du fichier = numéro de la photo sur pexels.com */
+const IMG = (id) => `images/${id}.jpg`;
+
+const DATA = {
+  brand: 'Djolof Chicken Thiès',
+  whatsapp: '221339511434',               // format 221XXXXXXXXX, sans + ni espaces
+  phoneHref: 'tel:+221339511434',
+  mapsUrl: 'https://www.google.com/maps/search/?api=1&query=Djolof+Chicken+EDK+Oil+Thi%C3%A8s',
+  refPrefix: 'DC',
+  pickup: { name: 'Retrait sur place', address: 'EDK Oil Thiès, Route de Dakar / Nguinth' },
+  zones: [
+    { name: 'Zone A', fee: 700,  quartiers: ['Cité Senghor', 'Grand Standing', 'Dixième', 'Carrefour'] },
+    { name: 'Zone B', fee: 1000, quartiers: ['Nguinth', 'Keur Mame Elhadji', 'Thialy'] }
+  ],
+  cats: [
+    { id: 'all',    label: 'Tous',              icon: '🍽️', img: IMG(6941027) },
+    { id: 'bucket', label: 'Buckets',           icon: '🍗', img: IMG(5474676) },
+    { id: 'tender', label: 'Tenders & Wings',   icon: '🌶️', img: IMG(29653191) },
+    { id: 'burger', label: 'Burgers',           icon: '🍔', img: IMG(19247582) },
+    { id: 'tacos',  label: 'Tacos & Chawarmas', icon: '🌯', img: IMG(18177335) },
+    { id: 'plate',  label: 'Assiettes',         icon: '🍽️', img: IMG(1352264) },
+    { id: 'pizza',  label: 'Pizzas',            icon: '🍕', img: IMG(14590497) },
+    { id: 'drink',  label: 'Frites & Boissons', icon: '🍟', img: IMG(27758755) }
+  ],
+  /* Carte Djolof Chicken EDK Thiès (prix en F CFA).
+     src : 'edk'   = prix affiché sur la fiche Yassir de Djolof Chicken EDK Thiès ;
+           'thies' = prix donné pour Thiès (fiche Yassir Nguinth ou tarifs communiqués) ;
+           'web'   = prix relevé ailleurs (Dakar, annuaires) : À CONFIRMER avec le restaurant.
+     Les menus poulet sont « Épuisé » sur Yassir : leur prix n'y est pas affiché. */
+  items: [
+    { id: 'djolof1', cat: 'bucket', name: 'Menu Djolof 1', desc: '2 pcs poulet + frites + canette · classique ou épicé', price: 2500, emo: '🍗', side: '', badge: 'Bestseller', rate: '4.8', src: 'thies', img: IMG(12118979) },
+    { id: 'djolof2', cat: 'bucket', name: 'Menu Djolof 2', desc: '3 pcs poulet + frites + soda', price: 3500, emo: '🍗', side: '', badge: '', rate: '4.7', src: 'web', img: IMG(15390177) },
+    { id: 'djolof3', cat: 'bucket', name: 'Menu Djolof 3', desc: '5 pcs poulet + frites + soda', price: 5500, emo: '🍗', side: '', badge: '', rate: '4.7', src: 'web', img: IMG(7734563) },
+    { id: 'family1', cat: 'bucket', name: 'Djolof Family 1', desc: '8 pcs poulet + frites + boisson GM', price: 9500, emo: '🍗', side: '', badge: 'Famille', rate: '4.8', src: 'thies', img: IMG(5474676) },
+    { id: 'family2', cat: 'bucket', name: 'Djolof Family 2', desc: '15 pcs poulet + frites + boisson GM', price: 16500, emo: '🍗', side: '', badge: 'XXL', rate: '4.9', src: 'thies', img: IMG(14686448) },
+    { id: 'family3', cat: 'bucket', name: 'Djolof Family 3', desc: '22 pcs poulet + frites + boisson magnum', price: 21500, emo: '🍗', side: '', badge: 'Géant', rate: '4.9', src: 'thies', img: IMG(6941027) },
+    { id: 'wings4', cat: 'tender', name: 'Djolof Wings 4 pcs', desc: '4 ailes de poulet épicées', price: 2000, emo: '🌶️', side: '', badge: 'Épicé', rate: '4.6', src: 'web', img: IMG(13785146) },
+    { id: 'wings8', cat: 'tender', name: 'Djolof Wings 8 pcs', desc: '8 ailes de poulet épicées', price: 3500, emo: '🌶️', side: '', badge: 'Épicé', rate: '4.6', src: 'web', img: IMG(6941026) },
+    { id: 'tender4', cat: 'tender', name: 'Djolof Tender 4 pcs', desc: '4 tenders + frites + soda', price: 2800, emo: '🍗', side: '', badge: '', rate: '4.7', src: 'web', img: IMG(29653191) },
+    { id: 'tender8', cat: 'tender', name: 'Djolof Tender 8 pcs', desc: '8 tenders + frites + soda', price: 4800, emo: '🍗', side: '', badge: '', rate: '4.7', src: 'web', img: IMG(11118936) },
+    { id: 'nuggets5', cat: 'tender', name: 'Djolof Nuggets 5 pcs', desc: '5 nuggets + frites', price: 2000, emo: '🍗', side: '', badge: '', rate: '4.5', src: 'web', img: IMG(15529775) },
+    { id: 'nuggets10', cat: 'tender', name: 'Djolof Nuggets 10 pcs', desc: '10 nuggets + frites', price: 3000, emo: '🍗', side: '', badge: '', rate: '4.5', src: 'web', img: IMG(15529775) },
+    { id: 'popcornpm', cat: 'tender', name: 'Djolof Popcorn PM', desc: 'Poulet pop-corn, petit modèle', price: 1800, emo: '🍿', side: '', badge: '', rate: '4.6', src: 'web', img: IMG(4253705) },
+    { id: 'popcorngm', cat: 'tender', name: 'Djolof Popcorn GM', desc: 'Poulet pop-corn, grand modèle', price: 2500, emo: '🍿', side: '', badge: '', rate: '4.6', src: 'thies', img: IMG(4253705) },
+    { id: 'crevettepm', cat: 'tender', name: 'Djolof Crevette PM', desc: 'Crevettes panées, petit modèle', price: 2500, emo: '🦐', side: '', badge: '', rate: '4.5', src: 'web', img: IMG(16694957) },
+    { id: 'crevettegm', cat: 'tender', name: 'Djolof Crevette GM', desc: 'Crevettes panées, grand modèle', price: 4500, emo: '🦐', side: '', badge: '', rate: '4.6', src: 'thies', img: IMG(24405873) },
+    { id: 'djolofburger', cat: 'burger', name: 'Djolof Burger', desc: 'Le burger signature Djolof', price: 3200, emo: '🍔', side: '', badge: 'Populaire', rate: '4.7', src: 'thies', img: IMG(19247582), tint: 'red' },
+    { id: 'fish', cat: 'burger', name: 'Djolof Burger Fish', desc: 'Burger poisson + frites + soda', price: 3000, emo: '🍔', side: '', badge: '', rate: '4.5', src: 'web', img: IMG(5860588), tint: 'red' },
+    { id: 'cheese', cat: 'burger', name: 'Cheese Burger', desc: 'Steak, cheddar fondant, sauce maison', price: 1500, emo: '🍔', side: '', badge: '', rate: '4.5', src: 'edk', img: IMG(19247562), tint: 'red' },
+    { id: 'double', cat: 'burger', name: 'Double Hamburger', desc: 'Deux steaks, double gourmandise', price: 2500, emo: '🍔', side: '', badge: '', rate: '4.6', src: 'edk', img: IMG(7816894), tint: 'red' },
+    { id: 'royal', cat: 'burger', name: 'Hamburger Royal + Œuf', desc: 'Hamburger garni + œuf', price: 1800, emo: '🍔', side: '', badge: '', rate: '4.5', src: 'edk', img: IMG(2293537), tint: 'red' },
+    { id: 'steak', cat: 'burger', name: 'Sandwich Steak', desc: 'Steak, crudités, sauce', price: 1500, emo: '🥖', side: '', badge: '', rate: '4.4', src: 'edk', img: IMG(6608664), tint: 'red' },
+    { id: 'hotdog', cat: 'burger', name: 'Hot-Dog Norvégienne', desc: 'Saucisse, pain moelleux, sauce', price: 1500, emo: '🌭', side: '', badge: '', rate: '4.4', src: 'edk', img: IMG(4113456), tint: 'red' },
+    { id: 'norvdouble', cat: 'burger', name: 'Norvégienne Double', desc: 'Double saucisse', price: 2000, emo: '🌭', side: '', badge: '', rate: '4.4', src: 'edk', img: IMG(23833918), tint: 'red' },
+    { id: 'tacosclassic', cat: 'tacos', name: 'Tacos Classique', desc: 'Le tacos simple et généreux', price: 2500, emo: '🌮', side: '', badge: '', rate: '4.5', src: 'edk', img: IMG(4955219), tint: 'red' },
+    { id: 'tacosdjolof', cat: 'tacos', name: 'Tacos Djolof', desc: 'Poulet ou viande, maïs, frites, sauce fromagère', price: 3000, emo: '🌮', side: '', badge: 'Populaire', rate: '4.7', src: 'edk', img: IMG(18177335), tint: 'red' },
+    { id: 'chawsimple', cat: 'tacos', name: 'Chawarma Simple', desc: 'Chawarma garni', price: 1500, emo: '🌯', side: '', badge: '', rate: '4.5', src: 'edk', img: IMG(9980764), tint: 'red' },
+    { id: 'chawroyal', cat: 'tacos', name: 'Chawarma Royal + Œuf', desc: 'Chawarma garni + œuf', price: 1800, emo: '🌯', side: '', badge: '', rate: '4.6', src: 'edk', img: IMG(6416559), tint: 'red' },
+    { id: 'asteak', cat: 'plate', name: 'Assiette Steak', desc: 'Steak, frites et crudités', price: 2500, emo: '🍽️', side: '', badge: '', rate: '4.5', src: 'edk', img: IMG(1352264) },
+    { id: 'achaw', cat: 'plate', name: 'Assiette Chawarma Viande', desc: 'Chawarma viande, frites, sauce', price: 2500, emo: '🍽️', side: '', badge: '', rate: '4.6', src: 'edk', img: IMG(29285458) },
+    { id: 'aburger', cat: 'plate', name: 'Assiette Hamburger', desc: 'Hamburger servi avec frites', price: 2500, emo: '🍽️', side: '', badge: '', rate: '4.5', src: 'edk', img: IMG(27998840) },
+    { id: 'margarita', cat: 'pizza', name: 'Pizza Margarita', desc: 'Mozzarella, origan, olives noires', price: 3500, emo: '🍕', side: '', badge: '', rate: '', src: 'edk', img: IMG(14590497) },
+    { id: '3fromages', cat: 'pizza', name: 'Pizza Trois Fromages', desc: 'Mozzarella, emmental, roquefort', price: 4000, emo: '🍕', side: '', badge: '', rate: '', src: 'edk', img: IMG(16014980) },
+    { id: 'reine', cat: 'pizza', name: 'Pizza Reine', desc: 'Jambon, champignons, olives noires', price: 4000, emo: '🍕', side: '', badge: '', rate: '', src: 'edk', img: IMG(19260842) },
+    { id: 'orientale', cat: 'pizza', name: 'Pizza Orientale', desc: 'Viande hachée, mozzarella, olives noires', price: 4000, emo: '🍕', side: '', badge: '', rate: '', src: 'edk', img: IMG(315755) },
+    { id: 'pizzachaw', cat: 'pizza', name: 'Pizza Chawarma', desc: 'Viande chawarma, tomate, oignon, persil, mozzarella', price: 4000, emo: '🍕', side: '', badge: '', rate: '', src: 'edk', img: IMG(9957551) },
+    { id: 'teffess', cat: 'pizza', name: 'Pizza Teffess Gui', desc: 'Crevettes, calamar, thon, mozzarella, olives', price: 4000, emo: '🍕', side: '', badge: '', rate: '', src: 'edk', img: IMG(803290) },
+    { id: 'fritespm', cat: 'drink', name: 'Frites PM', desc: 'Petit modèle', price: 500, emo: '🍟', side: '', badge: '', rate: '', src: 'edk', img: IMG(4109234) },
+    { id: 'fritesgm', cat: 'drink', name: 'Frites GM', desc: 'Grand modèle', price: 1000, emo: '🍟', side: '', badge: '', rate: '', src: 'edk', img: IMG(27758755) },
+    { id: 'boissonpm', cat: 'drink', name: 'Boisson PM', desc: 'Soda petit modèle', price: 500, emo: '🥤', side: '', badge: '', rate: '', src: 'web', img: IMG(8880742), tint: 'cool' },
+    { id: 'boissongm', cat: 'drink', name: 'Boisson GM', desc: 'Soda grand modèle', price: 1000, emo: '🥤', side: '', badge: '', rate: '', src: 'web', img: IMG(8879626), tint: 'cool' }
+  ],
+  popular: ['djolof1', 'family1', 'djolofburger', 'tacosdjolof', 'tender4', 'family2']
+};
+
+/* ═══════════════════════════════════════════════════════════
+   2 · MOTEUR DE COMMANDE — même logique que La Casablancaise
+   (panier, logistique, frais par quartier, ticket WhatsApp)
+   ═══════════════════════════════════════════════════════════ */
+(() => {
+  const $ = (s, c = document) => c.querySelector(s);
+  const $$ = (s, c = document) => [...c.querySelectorAll(s)];
+  const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const fcfa = (n) => n.toLocaleString('fr-FR').replace(/ | /g, ' ') + ' F CFA';
+  const byId = Object.fromEntries(DATA.items.map((i) => [i.id, i]));
+  const cart = {};                                         // id → quantité
+  const favs = new Set();
+  let currentCat = 'all', query = '';
+
+  // stockage local facultatif (historique, profil) : l'app marche sans
+  const store = {
+    get(k, d) { try { const v = localStorage.getItem('djolof:' + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
+    set(k, v) { try { localStorage.setItem('djolof:' + k, JSON.stringify(v)); } catch (e) { /* navigation privée */ } }
+  };
+
+  const PLUS = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>';
+  const HEART = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10Z"/></svg>';
+  const TRASH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></svg>';
+
+  /* ─── Rendu des visuels et cartes ─── */
+  const visual = (i, cls = '') => `<div class="dish-img ${i.tint ? 't-' + i.tint : ''} ${cls}">
+      <span class="dish-emo" aria-hidden="true">${i.emo}${i.side ? `<small>${i.side}</small>` : ''}</span>
+      ${i.img ? `<img src="${esc(i.img)}" alt="${esc(i.name)}" loading="lazy" onerror="this.remove()">` : ''}
+    </div>`;
+  const addBtn = (i) => `<button class="add" type="button" data-inc="${esc(i.id)}" aria-label="Ajouter ${esc(i.name)} au panier">${PLUS}<span class="qty" data-qty="${esc(i.id)}" hidden></span></button>`;
+  const rate = (i) => i.rate ? `<p class="dish-rate"><b>★★★★★</b> ${i.rate}</p>` : '';
+
+  const card = (i) => `
+    <article class="dish" data-id="${esc(i.id)}" data-cat="${esc(i.cat)}">
+      ${i.badge ? `<span class="badge${i.badge === 'Nouveau' ? ' gold' : ''}">${esc(i.badge)}</span>` : ''}
+      <button class="fav" type="button" data-fav="${esc(i.id)}" aria-label="Ajouter ${esc(i.name)} aux favoris" aria-pressed="false">${HEART}</button>
+      ${visual(i)}
+      <h3 class="dish-name">${esc(i.name)}</h3>
+      <p class="dish-desc">${esc(i.desc)}</p>
+      ${rate(i)}
+      <div class="dish-foot"><span class="price">${fcfa(i.price).replace(' F CFA', ' <small>F CFA</small>')}</span>${addBtn(i)}</div>
+    </article>`;
+
+  const row = (i) => `
+    <article class="row dish" data-id="${esc(i.id)}" data-cat="${esc(i.cat)}">
+      ${visual(i)}
+      <div class="row-main">
+        <h4 class="dish-name">${esc(i.name)}</h4>
+        <p class="dish-desc">${esc(i.desc)}</p>
+        <div class="dish-foot"><span class="price">${fcfa(i.price).replace(' F CFA', ' <small>F CFA</small>')}</span>${addBtn(i)}</div>
+      </div>
+    </article>`;
+
+  const catBubbles = (scope) => `<div class="cats" role="group" aria-label="Catégories">
+    ${DATA.cats.map((c) => `<button type="button" class="cat${c.id === currentCat ? ' on' : ''}" data-cat="${c.id}" data-scope="${scope}" aria-pressed="${c.id === currentCat}"><span class="bub" aria-hidden="true">${c.icon}${c.img ? `<img src="${esc(c.img)}" alt="" loading="lazy" onerror="this.remove()">` : ''}</span><span>${esc(c.label)}</span></button>`).join('')}
+  </div>`;
+
+  /* ─── Vue Accueil ─── */
+  const slides = [
+    { cls: '', tag: '🔥 Hot & Crispy', h: 'Le vrai goût <span>Djolof</span> à Thiès', p: 'Poulet pané minute, croustillant dehors, juteux dedans.', cta: 'Commander', go: 'bucket', art: '🍗', small: '🍟', photo: IMG(5474676) },
+    { cls: 'gold', tag: '👨‍👩‍👧‍👦 En famille', h: 'Djolof Family 2 : <span>15 pièces</span>', p: 'Frites + boisson grand modèle, pour toute la tribu.', cta: 'Je le veux', add: 'family2', art: '🍗', small: '🥤', photo: IMG(14686448) },
+    { cls: 'dark', tag: '🛵 Livraison', h: 'Livré chez vous <span>dès 700 F</span>', p: 'Cité Senghor, Dixième, Nguinth, Thialy…', cta: 'Voir le menu', go: 'all', art: '🛵', small: '🍔', photo: IMG(7362948) }
+  ];
+  $('#vHome').innerHTML = `
+    <div class="hero">
+      <div class="slides" id="slides">
+        ${slides.map((s, k) => `<div class="slide ${s.cls}" role="group" aria-roledescription="diapositive" aria-label="${k + 1} sur ${slides.length}">
+          <span class="tag">${s.tag}</span><h3>${s.h}</h3><p>${s.p}</p>
+          <button type="button" class="cta" ${s.add ? `data-inc="${s.add}"` : `data-slide-cat="${s.go}"`}>${s.cta} <i>→</i></button>
+          <span class="art" aria-hidden="true">${s.art}<small>${s.small}</small></span>
+          ${s.photo ? `<span class="art-photo" aria-hidden="true"><img src="${esc(s.photo)}" alt="" onerror="this.parentNode.remove()"></span>` : ''}
+        </div>`).join('')}
+      </div>
+      <div class="dots" id="dots">${slides.map((_, k) => `<button type="button" aria-label="Diapositive ${k + 1}"${k ? '' : ' class="on"'}></button>`).join('')}</div>
+    </div>
+    ${catBubbles('home')}
+    <div class="sec-head"><h2 id="homeTitle">Menus populaires</h2><button class="link" type="button" data-go="menu">Tout voir →</button></div>
+    <div class="rail" id="homeGrid"></div>
+    <div class="promo">
+      <span class="seal"><span><b>700 F</b>livraison</span></span>
+      <small>Livraison express 🔥</small>
+      <h3>Dès 700 F à Thiès</h3>
+      <p>Cité Senghor, Grand Standing, Dixième, Carrefour.</p>
+      <button class="btn-sm" type="button" data-open-cart>Commander →</button>
+      <span class="art" aria-hidden="true">🍔</span>
+      <span class="promo-photo" aria-hidden="true"><img src="${IMG(70497)}" alt="" onerror="this.parentNode.remove()"></span>
+    </div>
+    <div class="perks">
+      <div class="perk"><b>⚡</b><span>Rapide</span><small>Cuisiné minute</small></div>
+      <div class="perk"><b>🌶️</b><span>Épicé</span><small>Recette Djolof</small></div>
+      <div class="perk"><b>💵</b><span>Paiement</span><small>À la réception</small></div>
+    </div>`;
+
+  /* ─── Vue Menu ─── */
+  function renderMenu() {
+    const groups = DATA.cats.filter((c) => c.id !== 'all' && (currentCat === 'all' || c.id === currentCat));
+    const html = groups.map((c) => {
+      const list = DATA.items.filter((i) => i.cat === c.id && match(i));
+      return list.length ? `<div class="menu-group"><h3>${c.icon} ${esc(c.label)}</h3>${list.map(row).join('')}</div>` : '';
+    }).join('');
+    $('#menuList').innerHTML = html || emptyMsg();
+    renderCart();
+  }
+  $('#vMenu').innerHTML = `<h1 class="view-title">Notre menu</h1><p class="view-sub">Toute la carte Djolof Chicken Thiès, prix en F CFA.</p><div id="menuCats"></div><div id="menuList"></div>`;
+
+  /* ─── Filtres et recherche ─── */
+  const norm = (s) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  const match = (i) => !query || norm(i.name + ' ' + i.desc).includes(norm(query));
+  const emptyMsg = () => `<p class="empty"><b>🐔</b>Aucun plat ne correspond à « ${esc(query)} ».</p>`;
+
+  function renderHome() {
+    let list;
+    if (query) list = DATA.items.filter(match);
+    else if (currentCat === 'all') list = DATA.popular.map((id) => byId[id]);
+    else list = DATA.items.filter((i) => i.cat === currentCat);
+    const cat = DATA.cats.find((c) => c.id === currentCat);
+    $('#homeTitle').textContent = query ? 'Résultats' : (currentCat === 'all' ? 'Menus populaires' : `${cat.icon} ${cat.label}`);
+    $('#homeGrid').innerHTML = list.length ? list.map(card).join('') : emptyMsg();
+    renderCart();
+  }
+  function setCat(id) {
+    currentCat = id;
+    $$('.cat').forEach((b) => { const on = b.dataset.cat === id; b.classList.toggle('on', on); b.setAttribute('aria-pressed', on); });
+    renderHome(); renderMenu();
+  }
+  $('#menuCats').innerHTML = catBubbles('menu');
+  document.addEventListener('click', (e) => {
+    const c = e.target.closest('.cat');
+    if (c) setCat(c.dataset.cat);
+    const s = e.target.closest('[data-slide-cat]');
+    if (s) { setCat(s.dataset.slideCat); $('#homeGrid').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+  $('#q').addEventListener('input', (e) => {
+    query = e.target.value.trim();
+    if (current !== 'home' && current !== 'menu') go('home');
+    renderHome(); renderMenu();
+  });
+
+  /* ─── Carrousel ─── */
+  const track = $('#slides'), dots = $$('#dots button');
+  let slideIdx = 0;
+  const showSlide = (k) => { slideIdx = k; track.scrollTo({ left: k * (track.clientWidth + 12), behavior: 'smooth' }); };
+  dots.forEach((d, k) => d.addEventListener('click', () => showSlide(k)));
+  track.addEventListener('scroll', () => {
+    const k = Math.round(track.scrollLeft / (track.clientWidth + 12));
+    dots.forEach((d, j) => d.classList.toggle('on', j === k));
+    slideIdx = k;
+  }, { passive: true });
+  setInterval(() => { if (current === 'home' && !document.hidden) showSlide((slideIdx + 1) % slides.length); }, 5000);
+
+  /* ═══ Panier et calculs ═══ */
+  const form = $('#coForm'), sheet = $('#sheet'), cartbar = $('#cartbar');
+  const val = (n) => (form.elements[n] ? String(form.elements[n].value || '') : '').trim();
+  const radio = (n) => { const r = form.querySelector(`input[name="${n}"]:checked`); return r ? r.value : ''; };
+  const isDelivery = () => radio('mode') === 'livraison';
+  // valeur du select « indexZone:indexQuartier »
+  const zone = () => {
+    if (!isDelivery() || !val('zone')) return null;
+    const [z, q] = val('zone').split(':').map(Number);
+    return { ...DATA.zones[z], quartier: DATA.zones[z].quartiers[q] };
+  };
+  const count = () => Object.values(cart).reduce((a, q) => a + q, 0);
+  const subtotal = () => Object.entries(cart).reduce((a, [id, q]) => a + byId[id].price * q, 0);
+  const fee = () => (zone() ? zone().fee : 0);
+  const total = () => subtotal() + fee();
+
+  $('#zoneSel').innerHTML = '<option value="">Choisissez votre quartier</option>' +
+    DATA.zones.map((z, zi) => `<optgroup label="${esc(z.name)} — ${fcfa(z.fee)}">${z.quartiers.map((q, qi) => `<option value="${zi}:${qi}">${esc(q)}</option>`).join('')}</optgroup>`).join('');
+  $('#pickupInfo').innerHTML = `<b>📍</b><span><strong>${esc(DATA.pickup.address)}</strong><br>Frais de livraison : 0 F CFA. Nous vous prévenons sur WhatsApp quand c'est prêt.</span>`;
+
+  const stepper = (id) => {
+    const n = esc(byId[id].name);
+    return `<span class="stepper"><button type="button" data-dec="${esc(id)}" aria-label="Retirer un ${n}">−</button><b aria-label="Quantité">${cart[id]}</b><button type="button" data-inc="${esc(id)}" aria-label="Ajouter un ${n}">+</button></span>`;
+  };
+  const thumb = (i) => `<span class="thumb" aria-hidden="true">${i.img ? `<img src="${esc(i.img)}" alt="" onerror="this.replaceWith('${i.emo}')">` : i.emo}</span>`;
+
+  function renderCart() {
+    // pastilles de quantité sur les boutons « + » des cartes
+    $$('[data-qty]').forEach((q) => { const n = cart[q.dataset.qty] || 0; q.hidden = !n; q.textContent = n; });
+    const n = count();
+    const bag = $('#bagCount');
+    bag.hidden = !n; bag.textContent = n;
+    $('#cartbarTxt').innerHTML = `${n} article${n > 1 ? 's' : ''}<b>${fcfa(subtotal())}</b>`;
+    cartbar.classList.toggle('on', n > 0 && !sheet.classList.contains('open'));
+    $('#coLines').innerHTML = n
+      ? Object.keys(cart).map((id) => `<div class="line">${thumb(byId[id])}<span class="line-name">${esc(byId[id].name)}<small>${fcfa(byId[id].price * cart[id])}</small></span>${stepper(id)}<button type="button" class="trash" data-del="${esc(id)}" aria-label="Supprimer ${esc(byId[id].name)}">${TRASH}</button></div>`).join('')
+      : '<p class="empty"><b>🛍️</b>Votre panier est vide.<br>Ajoutez un bucket croustillant !</p>';
+    renderTotals();
+  }
+
+  function renderTotals() {
+    const z = zone();
+    $('#coSub').textContent = fcfa(subtotal());
+    $('#coZoneName').textContent = z ? `(${z.quartier})` : (radio('mode') === 'retrait' ? '(retrait)' : '');
+    $('#coFee').textContent = z ? fcfa(z.fee) : (isDelivery() ? '—' : fcfa(0));
+    $('#coTotal').textContent = fcfa(total());
+    $('#feeHint').textContent = z ? `${z.name} : ${fcfa(z.fee)} de frais de livraison.` : '';
+  }
+
+  let toastT;
+  function toast(msg) {
+    const t = $('#toast');
+    t.textContent = msg; t.classList.add('on');
+    clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 1800);
+  }
+
+  function change(id, delta) {
+    if (!byId[id]) return;
+    cart[id] = (cart[id] || 0) + delta;
+    if (cart[id] <= 0) delete cart[id];
+    renderCart();
+  }
+
+  // un seul écouteur pour tous les +/−/supprimer (cartes, carrousel, panier)
+  document.addEventListener('click', (e) => {
+    const del = e.target.closest('[data-del]');
+    if (del) { delete cart[del.dataset.del]; renderCart(); return; }
+    const btn = e.target.closest('[data-inc], [data-dec]');
+    if (!btn) return;
+    const id = btn.dataset.inc || btn.dataset.dec;
+    const inSheet = !!btn.closest('#sheet');
+    change(id, btn.dataset.inc ? 1 : -1);
+    if (btn.dataset.inc && !inSheet) {
+      toast(`✓ ${byId[id].name} ajouté au panier`);
+      const b = $('#bagCount'); b.classList.remove('pop'); void b.offsetWidth; b.classList.add('pop');
+    }
+    if (inSheet && e.detail === 0) { // clavier : rendre le focus au même contrôle
+      const next = $(`#sheet [data-inc="${CSS.escape(id)}"]`) || $('#sheet .x');
+      next.focus();
+    }
+  });
+
+  // favoris (visuel uniquement)
+  document.addEventListener('click', (e) => {
+    const f = e.target.closest('[data-fav]');
+    if (!f) return;
+    const id = f.dataset.fav;
+    favs.has(id) ? favs.delete(id) : favs.add(id);
+    $$(`[data-fav="${CSS.escape(id)}"]`).forEach((b) => { b.classList.toggle('on', favs.has(id)); b.setAttribute('aria-pressed', favs.has(id)); });
+  });
+
+  /* ═══ Ouverture / fermeture du panier ═══ */
+  let lastFocus = null;
+  function openSheet() {
+    showForm();
+    lastFocus = document.activeElement;
+    sheet.classList.add('open'); sheet.setAttribute('aria-hidden', 'false');
+    document.documentElement.classList.add('lock');
+    cartbar.classList.remove('on');
+    setTimeout(() => $('.x', sheet).focus(), 60);
+  }
+  function closeSheet() {
+    if (!sheet.classList.contains('open')) return;
+    sheet.classList.remove('open'); sheet.setAttribute('aria-hidden', 'true');
+    document.documentElement.classList.remove('lock');
+    renderCart();
+    if (lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+  cartbar.addEventListener('click', openSheet);
+  $('#bagBtn').addEventListener('click', openSheet);
+  document.addEventListener('click', (e) => { if (e.target.closest('[data-open-cart]')) openSheet(); });
+  $$('[data-close]', sheet).forEach((b) => b.addEventListener('click', closeSheet));
+
+  /* ═══ Champs conditionnels (livraison / retrait) ═══ */
+  function updateMode() {
+    $('#delivFields').hidden = !isDelivery();
+    $('#pickupInfo').hidden = radio('mode') !== 'retrait';
+  }
+  form.addEventListener('change', (e) => {
+    const n = e.target.name;
+    if (n === 'mode') updateMode();
+    if (n === 'mode' || n === 'zone') renderTotals();
+    clearErr(e.target);
+  });
+  form.addEventListener('input', (e) => clearErr(e.target));
+  function clearErr(el) {
+    const f = el.closest('.field'); if (f) f.classList.remove('is-bad');
+    const g = el.closest('.opts'); if (g) g.classList.remove('is-bad');
+  }
+
+  /* ═══ Validation ═══ */
+  // numéro mobile ou fixe sénégalais, avec ou sans +221 / 00221
+  function phoneOk(p) {
+    let d = p.replace(/\D/g, '');
+    if (d.startsWith('00')) d = d.slice(2);
+    if (d.startsWith('221')) d = d.slice(3);
+    return /^(7[05678]|3[03])\d{7}$/.test(d);
+  }
+  function markBad(name) {
+    const el = form.elements[name];
+    const node = el instanceof RadioNodeList ? el[0] : el;
+    const f = node.closest('.field'); if (f) f.classList.add('is-bad');
+    const g = node.closest('.opts'); if (g) g.classList.add('is-bad');
+    return node.closest('.field, .opts');
+  }
+  function validate() {
+    const errs = [];
+    if (!count()) { $('#coLines').innerHTML = '<p class="empty"><b>🍗</b>Ajoutez au moins un plat.</p>'; errs.push($('#coLines')); }
+    if (!val('name')) errs.push(markBad('name'));
+    if (!phoneOk(val('phone'))) errs.push(markBad('phone'));
+    if (!radio('mode')) errs.push(markBad('mode'));
+    if (isDelivery() && !val('zone')) errs.push(markBad('zone'));
+    return errs;
+  }
+
+  /* ═══ Ticket WhatsApp ═══ */
+  const makeRef = () => `${DATA.refPrefix}-${Math.floor(Math.random() * 0x10000).toString(16).toUpperCase().padStart(4, '0')}`;
+  function buildMessage(ref) {
+    const liv = isDelivery(), z = zone();
+    const place = liv ? z.quartier + (val('addr') ? ` — ${val('addr')}` : '') : DATA.pickup.address;
+    const L = [];
+    L.push(`🍗 NOUVELLE COMMANDE - ${DATA.brand.toUpperCase()} 🍗`);
+    L.push(`Réf : ${ref}`);
+    L.push('');
+    L.push(`Client : ${val('name')}`);
+    L.push(`Téléphone : ${val('phone')}`);
+    L.push('');
+    L.push('DÉTAILS DU PANIER :');
+    Object.keys(cart).forEach((id) => L.push(`• ${cart[id]} x ${byId[id].name} (${fcfa(byId[id].price * cart[id])})`));
+    L.push('');
+    L.push('LOGISTIQUE :');
+    L.push(`- Mode : ${liv ? 'Livraison' : 'Retrait'}`);
+    L.push(`- Quartier/Adresse : ${place}`);
+    L.push(`- Note Cuisine : ${val('note') || 'Aucune'}`);
+    L.push('');
+    L.push('TOTAL DE LA COMMANDE :');
+    L.push(`- Sous-total : ${fcfa(subtotal())}`);
+    L.push(`- Livraison : ${fcfa(fee())}`);
+    L.push(`- TOTAL À PAYER : ${fcfa(total())}`);
+    L.push('');
+    L.push('Merci de me confirmer la commande et le départ du livreur !');
+    return L.join('\n');
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const errs = validate();
+    if (errs.length) { errs[0].scrollIntoView({ behavior: 'smooth', block: 'center' }); return; }
+    const ref = makeRef();
+    const url = `https://wa.me/${DATA.whatsapp}?text=${encodeURIComponent(buildMessage(ref))}`;
+    saveOrder(ref);
+    window.open(url, '_blank', 'noopener');
+    showDone(ref, url);
+  });
+
+  /* ═══ Confirmation ═══ */
+  function showDone(ref, url) {
+    form.hidden = true; $('#coFoot').hidden = true;
+    const d = document.createElement('div');
+    d.className = 'done'; d.id = 'coDone';
+    d.innerHTML = `
+      <div class="big">🎉</div>
+      <h4>Plus qu'une étape !</h4>
+      <p>Appuyez sur <b>Envoyer</b> dans WhatsApp pour transmettre la commande <span class="ref">${esc(ref)}</span>. Djolof Chicken vous confirme la commande et le départ du livreur.</p>
+      <div class="done-actions">
+        <a class="send" href="${esc(url)}" target="_blank" rel="noopener">Rouvrir WhatsApp</a>
+        <button class="ghost" type="button" id="coNew">Nouvelle commande</button>
+      </div>`;
+    $('#coScroll').appendChild(d);
+    $('#coScroll').scrollTop = 0;
+    $('#coNew').addEventListener('click', () => {
+      Object.keys(cart).forEach((k) => delete cart[k]);
+      const keep = { name: val('name'), phone: val('phone') };
+      form.reset(); form.elements.name.value = keep.name; form.elements.phone.value = keep.phone;
+      updateMode(); renderCart(); closeSheet();
+    });
+  }
+  function showForm() {
+    const d = $('#coDone'); if (d) d.remove();
+    form.hidden = false; $('#coFoot').hidden = false;
+  }
+
+  /* ═══ Historique « Mes Commandes » et profil (stockés sur l'appareil) ═══ */
+  function saveOrder(ref) {
+    const list = store.get('orders', []);
+    list.unshift({
+      ref, date: Date.now(), total: total(), mode: isDelivery() ? 'Livraison · ' + zone().quartier : 'Retrait sur place',
+      lines: Object.keys(cart).map((id) => ({ id, q: cart[id] }))
+    });
+    store.set('orders', list.slice(0, 20));
+    store.set('profile', { name: val('name'), phone: val('phone') });
+    renderOrders(); renderProfile();
+  }
+  function renderOrders() {
+    const list = store.get('orders', []);
+    $('#vOrders').innerHTML = `<h1 class="view-title">Mes commandes</h1><p class="view-sub">Vos tickets envoyés depuis cet appareil.</p>` + (list.length
+      ? list.map((o, k) => `<div class="card">
+          <div class="hist-top"><div><p class="hist-ref">${esc(o.ref)}</p><p class="hist-date">${new Date(o.date).toLocaleString('fr-FR', { dateStyle: 'medium', timeStyle: 'short' })}</p></div><span class="pill">Envoyée sur WhatsApp</span></div>
+          <p class="hist-lines">${o.lines.filter((l) => byId[l.id]).map((l) => `${l.q} x ${esc(byId[l.id].name)}`).join('<br>')}<br>🛵 ${esc(o.mode)}</p>
+          <div class="hist-foot"><b>${fcfa(o.total)}</b><button class="ghost" type="button" data-reorder="${k}">↻ Recommander</button></div>
+        </div>`).join('')
+      : `<div class="card"><p class="empty"><b>🧾</b>Aucune commande pour l'instant.</p><button class="btn-sm" type="button" data-go="menu" style="display:flex;margin:0 auto">Découvrir le menu →</button></div>`);
+  }
+  document.addEventListener('click', (e) => {
+    const r = e.target.closest('[data-reorder]');
+    if (!r) return;
+    const o = store.get('orders', [])[+r.dataset.reorder];
+    if (!o) return;
+    o.lines.forEach((l) => { if (byId[l.id]) cart[l.id] = (cart[l.id] || 0) + l.q; });
+    renderCart(); openSheet();
+  });
+
+  function renderProfile() {
+    const p = store.get('profile', {});
+    $('#vProfile').innerHTML = `
+      <h1 class="view-title">Profil</h1><p class="view-sub">Vos infos pré-remplissent le panier.</p>
+      <div class="card profile-head"><span class="avatar">🧑🏾</span><div><h3>${esc(p.name || 'Chicken Lover')}</h3><p>${esc(p.phone || 'Aucun numéro enregistré')}</p></div></div>
+      <div class="card"><ul class="info-list">
+        <li><b>📍</b><a href="${esc(DATA.mapsUrl)}" target="_blank" rel="noopener">${esc(DATA.pickup.address)}<small>Retrait sur place · gratuit</small></a></li>
+        <li><b>📞</b><a href="${esc(DATA.phoneHref)}">Appeler le restaurant<small>+221 33 951 14 34</small></a></li>
+        ${DATA.zones.map((z) => `<li><b>🛵</b><span>${esc(z.name)} · ${fcfa(z.fee)}<small>${z.quartiers.map(esc).join(', ')}</small></span></li>`).join('')}
+        <li><b>💵</b><span>Paiement à la réception<small>Espèces, Wave ou Orange Money</small></span></li>
+      </ul></div>`;
+    if (p.name && !val('name')) form.elements.name.value = p.name;
+    if (p.phone && !val('phone')) form.elements.phone.value = p.phone;
+  }
+
+  /* ─── Vue Offres ─── */
+  $('#vOffers').innerHTML = `
+    <h1 class="view-title">Offres</h1><p class="view-sub">Les bons plans Djolof Chicken Thiès.</p>
+    <div class="card offer gold"><span class="big">🍗<img src="${IMG(14686448)}" alt="" onerror="this.remove()"></span><div><h4>Djolof Family 2</h4><p>15 pièces + frites + boisson GM, idéal pour 5–6 personnes.</p><button class="btn-sm" type="button" data-inc="family2">Ajouter · ${fcfa(16500)}</button></div></div>
+    <div class="card offer"><span class="big">🛵<img src="${IMG(7362948)}" alt="" onerror="this.remove()"></span><div><h4>Livraison dès 700 F</h4><p>Zone A : Cité Senghor, Grand Standing, Dixième, Carrefour.</p><button class="btn-sm" type="button" data-open-cart>Commander</button></div></div>
+    <div class="card offer dark"><span class="big">🏪<img src="${IMG(12118979)}" alt="" onerror="this.remove()"></span><div><h4>Retrait gratuit</h4><p>${esc(DATA.pickup.address)}. 0 F de frais.</p><button class="btn-sm" type="button" data-go="menu">Voir le menu</button></div></div>`;
+
+  /* ═══ Navigation entre les vues ═══ */
+  let current = 'home';
+  function go(v) {
+    current = v;
+    $$('.view').forEach((s) => { s.hidden = s.dataset.view !== v; });
+    $$('.nav [data-go]').forEach((b) => { const on = b.dataset.go === v; b.classList.toggle('on', on); on ? b.setAttribute('aria-current', 'page') : b.removeAttribute('aria-current'); });
+    closeDrawer();
+    scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  document.addEventListener('click', (e) => { const g = e.target.closest('[data-go]'); if (g) go(g.dataset.go); });
+  $('#notifBtn').addEventListener('click', () => { go('offers'); $('#notifBtn .dot').hidden = true; });
+
+  const drawer = $('#drawer');
+  function closeDrawer() { drawer.classList.remove('open'); drawer.setAttribute('aria-hidden', 'true'); }
+  $('#menuBtn').addEventListener('click', () => { drawer.classList.add('open'); drawer.setAttribute('aria-hidden', 'false'); $('.dl', drawer).focus(); });
+  $('[data-close-drawer]').addEventListener('click', closeDrawer);
+  $('#callLink').href = DATA.phoneHref;
+  $('#mapLink').href = DATA.mapsUrl;
+  addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeSheet(); closeDrawer(); } });
+
+  /* ─── Démarrage ─── */
+  renderHome(); renderMenu(); renderOrders(); renderProfile(); updateMode(); renderCart();
+})();
+</script>
+</body>
+</html>
