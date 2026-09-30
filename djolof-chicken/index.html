@@ -265,7 +265,7 @@ img{display:block;max-width:100%}
 /* ─── Liste « Menu » ─── */
 .menu-group h3{font-size:16px;font-weight:700;margin:20px 0 10px;display:flex;align-items:center;gap:8px}
 .row{
-  display:flex;gap:12px;align-items:center;background:var(--white);border-radius:18px;padding:10px;
+  display:flex;flex-direction:row;gap:12px;align-items:center;background:var(--white);border-radius:18px;padding:10px;
   box-shadow:var(--shadow);margin-bottom:10px;
 }
 .row .dish-img{width:84px;flex:none;aspect-ratio:1;border-radius:14px}
@@ -612,27 +612,43 @@ const DATA = {
   cats: [
     { id: 'all',    label: 'Tous',              icon: '🍽️' },
     { id: 'bucket', label: 'Buckets',           icon: '🍗' },
+    { id: 'tender', label: 'Tenders & Wings',   icon: '🍤' },
     { id: 'burger', label: 'Burgers',           icon: '🍔' },
     { id: 'tacos',  label: 'Tacos & Chawarmas', icon: '🌯' },
-    { id: 'drink',  label: 'Boissons',          icon: '🥤' }
+    { id: 'drink',  label: 'Frites & Boissons', icon: '🥤' }
   ],
-  /* img : photo du plat — lien Unsplash (licence libre, usage commercial gratuit) ou fichier local
-     (ex. 'images/menu-classic.jpg'). Si l'image manque ou ne charge pas, l'emoji sert d'illustration. */
+  /* Carte Djolof Chicken (prix en F CFA).
+     src: 'thies' = prix donné pour Thiès ; 'dakar' = prix relevé sur les fiches Yassir des restaurants
+     de Dakar, À CONFIRMER pour Thiès.
+     img : photo libre de droits (Unsplash) ou fichier local ; sinon l'emoji sert d'illustration. */
   items: [
-    { id: 'classic',  cat: 'bucket', name: 'Menu Classic',        desc: '2 pcs poulet + frites + canette',        price: 2500,  emo: '🍗', side: '🍟', badge: 'Bestseller', rate: '4.8', img: 'https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?auto=format&fit=crop&w=600&q=70' },
-    { id: 'family1',  cat: 'bucket', name: 'Menu Family 1',       desc: '8 pcs poulet + frites + boisson GM',     price: 9500,  emo: '🍗', side: '🥤', badge: 'Famille',    rate: '4.8', img: 'https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=600&q=70' },
-    { id: 'family2',  cat: 'bucket', name: 'Menu Family 2',       desc: '15 pcs poulet + frites + boisson GM',    price: 16500, emo: '🍗', side: '🍗', badge: 'XXL',        rate: '4.9', img: '' },
-    { id: 'popcorn',  cat: 'bucket', name: 'Poulet Pop-Corn',     desc: 'Grand modèle, facile à emporter',        price: 2500,  emo: '🍿', side: '🍗', badge: '',           rate: '4.6', img: '' },
-    { id: 'burgerxl', cat: 'burger', name: 'Djolof Burger XL',    desc: 'Le burger signature, format XL',         price: 3200,  emo: '🍔', side: '',   badge: 'Populaire',  rate: '4.7', img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=70', tint: 'red' },
-    { id: 'cheese',   cat: 'burger', name: 'Cheese Burger Simple',desc: 'Steak, cheddar fondant, sauce maison',   price: 1500,  emo: '🍔', side: '🧀', badge: '',           rate: '4.5', img: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=70', tint: 'red' },
-    { id: 'tacos',    cat: 'tacos',  name: 'Tacos Djolof',        desc: 'Tacos généreux, sauce fromagère',        price: 3000,  emo: '🌮', side: '',   badge: 'Nouveau',    rate: '4.7', img: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=70', tint: 'red' },
-    { id: 'chawarma', cat: 'tacos',  name: 'Chawarma Royal',      desc: 'Chawarma garni + œuf',                   price: 1800,  emo: '🌯', side: '🥚', badge: '',           rate: '4.6', img: '', tint: 'red' },
-    /* ⚠ Boissons : prix indicatifs à confirmer avec le restaurant */
-    { id: 'canette',  cat: 'drink',  name: 'Canette 33 cl',       desc: 'Coca, Fanta ou Sprite',                  price: 500,   emo: '🥤', side: '',   badge: '',           rate: '',    img: '', tint: 'cool' },
-    { id: 'bissap',   cat: 'drink',  name: 'Jus de Bissap',       desc: 'Jus local bien frais',                   price: 500,   emo: '🧃', side: '',   badge: '',           rate: '',    img: '', tint: 'cool' },
-    { id: 'eau',      cat: 'drink',  name: 'Eau minérale 50 cl',  desc: 'Bouteille fraîche',                      price: 300,   emo: '💧', side: '',   badge: '',           rate: '',    img: '', tint: 'cool' }
+    { id: 'classic',  cat: 'bucket', name: 'Menu Classic / Épicé', desc: '2 pcs poulet + frites + canette',          price: 2500,  emo: '🍗', side: '🍟', badge: 'Bestseller', rate: '4.8', src: 'thies', img: 'https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?auto=format&fit=crop&w=600&q=70' },
+    { id: 'djolof2',  cat: 'bucket', name: 'Menu Djolof 2',        desc: '3 pcs poulet + frites + soda',             price: 3500,  emo: '🍗', side: '🍟', badge: '',           rate: '4.7', src: 'dakar', img: '' },
+    { id: 'djolof3',  cat: 'bucket', name: 'Menu Djolof 3',        desc: '5 pcs poulet + frites + soda',             price: 5500,  emo: '🍗', side: '🥤', badge: '',           rate: '4.7', src: 'dakar', img: '' },
+    { id: 'family1',  cat: 'bucket', name: 'Menu Family 1',        desc: '8 pcs poulet + frites + boisson GM',       price: 9500,  emo: '🍗', side: '🥤', badge: 'Famille',    rate: '4.8', src: 'thies', img: 'https://images.unsplash.com/photo-1562967914-608f82629710?auto=format&fit=crop&w=600&q=70' },
+    { id: 'family2',  cat: 'bucket', name: 'Menu Family 2',        desc: '15 pcs poulet + frites + boisson GM',      price: 16500, emo: '🍗', side: '🍗', badge: 'XXL',        rate: '4.9', src: 'thies', img: '' },
+    { id: 'family3',  cat: 'bucket', name: 'Menu Family 3',        desc: '22 pcs poulet + frites + boisson magnum',  price: 21500, emo: '🍗', side: '🍗', badge: 'Géant',      rate: '4.9', src: 'thies', img: '' },
+    { id: 'tender4',  cat: 'tender', name: 'Djolof Tender 4 pcs',  desc: '4 tenders + frites + soda',                price: 2800,  emo: '🍤', side: '🍟', badge: '',           rate: '4.7', src: 'dakar', img: '' },
+    { id: 'tender8',  cat: 'tender', name: 'Djolof Tender 8 pcs',  desc: '8 tenders + frites + soda',                price: 4800,  emo: '🍤', side: '🥤', badge: '',           rate: '4.7', src: 'dakar', img: '' },
+    { id: 'ap1',      cat: 'tender', name: 'Djolof AP 1',          desc: '4 ailes de poulet épicées',                price: 2000,  emo: '🍗', side: '🌶️', badge: 'Épicé',      rate: '4.6', src: 'dakar', img: '' },
+    { id: 'ap2',      cat: 'tender', name: 'Djolof AP 2',          desc: '8 ailes de poulet épicées',                price: 3500,  emo: '🍗', side: '🌶️', badge: 'Épicé',      rate: '4.6', src: 'dakar', img: '' },
+    { id: 'nuggets5', cat: 'tender', name: 'Djolof Nuggets 5 pcs', desc: '5 nuggets + frites',                       price: 2000,  emo: '🍤', side: '🍟', badge: '',           rate: '4.5', src: 'dakar', img: '' },
+    { id: 'nuggets10',cat: 'tender', name: 'Djolof Nuggets 10 pcs',desc: '10 nuggets + frites',                      price: 3000,  emo: '🍤', side: '🍟', badge: '',           rate: '4.5', src: 'dakar', img: '' },
+    { id: 'popcorn',  cat: 'tender', name: 'Poulet Pop-Corn GM',   desc: 'Grand modèle, facile à emporter',          price: 2500,  emo: '🍿', side: '🍗', badge: '',           rate: '4.6', src: 'thies', img: '' },
+    { id: 'burgerxl', cat: 'burger', name: 'Djolof Burger XL',     desc: 'Le burger signature, format XL',           price: 3200,  emo: '🍔', side: '',   badge: 'Populaire',  rate: '4.7', src: 'thies', img: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=70', tint: 'red' },
+    { id: 'fish',     cat: 'burger', name: 'Djolof Burger Fish',   desc: 'Burger poisson + frites + soda',           price: 3000,  emo: '🍔', side: '🐟', badge: '',           rate: '4.5', src: 'dakar', img: '', tint: 'red' },
+    { id: 'cheese',   cat: 'burger', name: 'Cheese Burger Simple', desc: 'Steak, cheddar fondant, sauce maison',     price: 1500,  emo: '🍔', side: '🧀', badge: '',           rate: '4.5', src: 'thies', img: 'https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=600&q=70', tint: 'red' },
+    { id: 'tacospoulet', cat: 'tacos', name: 'Tacos Djolof Poulet', desc: 'Poulet, maïs, frites, sauce fromagère',  price: 3000,  emo: '🌮', side: '',   badge: 'Populaire',  rate: '4.7', src: 'thies', img: 'https://images.unsplash.com/photo-1565299585323-38d6b0865b47?auto=format&fit=crop&w=600&q=70', tint: 'red' },
+    { id: 'tacosviande', cat: 'tacos', name: 'Tacos Djolof Viande', desc: 'Viande hachée, maïs, frites, sauce fromagère', price: 3000, emo: '🌮', side: '🥩', badge: '',        rate: '4.6', src: 'dakar', img: '', tint: 'red' },
+    { id: 'tacosclassic', cat: 'tacos', name: 'Tacos Classique',   desc: 'Le tacos simple et généreux',              price: 2500,  emo: '🌮', side: '',   badge: '',           rate: '4.5', src: 'dakar', img: '', tint: 'red' },
+    { id: 'chawsimple', cat: 'tacos', name: 'Chawarma Simple',     desc: 'Chawarma poulet garni',                    price: 1500,  emo: '🌯', side: '',   badge: '',           rate: '4.5', src: 'dakar', img: '', tint: 'red' },
+    { id: 'chawarma', cat: 'tacos',  name: 'Chawarma Royal + Œuf', desc: 'Chawarma garni + œuf',                     price: 1800,  emo: '🌯', side: '🥚', badge: '',           rate: '4.6', src: 'thies', img: '', tint: 'red' },
+    { id: 'fritespm', cat: 'drink',  name: 'Frites PM',            desc: 'Petit modèle',                             price: 500,   emo: '🍟', side: '',   badge: '',           rate: '',    src: 'dakar', img: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=70' },
+    { id: 'fritesgm', cat: 'drink',  name: 'Frites GM',            desc: 'Grand modèle',                             price: 1000,  emo: '🍟', side: '🍟', badge: '',           rate: '',    src: 'dakar', img: 'https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=70' },
+    { id: 'boissonpm',cat: 'drink',  name: 'Boisson PM',           desc: 'Soda petit modèle',                        price: 500,   emo: '🥤', side: '',   badge: '',           rate: '',    src: 'dakar', img: '', tint: 'cool' },
+    { id: 'boissongm',cat: 'drink',  name: 'Boisson GM',           desc: 'Soda grand modèle',                        price: 1000,  emo: '🥤', side: '🧊', badge: '',           rate: '',    src: 'dakar', img: '', tint: 'cool' }
   ],
-  popular: ['classic', 'family1', 'burgerxl', 'tacos']
+  popular: ['classic', 'family1', 'burgerxl', 'tacospoulet', 'tender4', 'family2']
 };
 
 /* ═══════════════════════════════════════════════════════════
